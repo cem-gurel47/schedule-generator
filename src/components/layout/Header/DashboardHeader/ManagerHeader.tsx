@@ -20,21 +20,20 @@ const DashboardManagerHeader = () => {
   return (
     <div className="navbar pt-4 shadow-md">
       <div className="flex-1">
-        <Link href={`${BASE_URL}`}>
-          <a className="btn-ghost btn text-2xl normal-case">
-            <div className="flex items-center space-x-2">
-              <CalendarDaysIcon className="h-12 w-12 text-secondary" />
-              <p className="text-secondary">Scheduler</p>
-            </div>
-          </a>
+        <Link
+          href={`${BASE_URL}`}
+          className="btn-ghost btn text-2xl normal-case"
+        >
+          <div className="flex items-center space-x-2">
+            <CalendarDaysIcon className="h-12 w-12 text-secondary" />
+            <p className="text-secondary">Scheduler</p>
+          </div>
         </Link>
       </div>
       <div className="flex-none">
         <ul className="menu menu-horizontal p-0">
           <li className={isActive("")}>
-            <Link href={`${BASE_URL}/`}>
-              <a>Work Schedule</a>
-            </Link>
+            <Link href={`${BASE_URL}/`}>Work Schedule</Link>
           </li>
           <li className="dropdown-hover dropdown">
             <div className="indicator">
@@ -62,31 +61,21 @@ const DashboardManagerHeader = () => {
               className="dropdown-content menu rounded-box w-52 bg-base-100 p-2 shadow"
             >
               <li>
-                <Link href={`${BASE_URL}/shift-changes`}>
-                  <a>Shift Changes</a>
-                </Link>
+                <Link href={`${BASE_URL}/shift-changes`}>Shift Changes</Link>
               </li>
               <li>
-                <Link href={`${BASE_URL}/shift-swaps`}>
-                  <a>Shift Swaps</a>
-                </Link>
+                <Link href={`${BASE_URL}/shift-swaps`}>Shift Swaps</Link>
               </li>
               <li>
-                <Link href={`${BASE_URL}/shift-cancels`}>
-                  <a>Shift Cancels</a>
-                </Link>
+                <Link href={`${BASE_URL}/shift-cancels`}>Shift Cancels</Link>
               </li>
             </ul>
           </li>
           <li className={isActive("/employees")}>
-            <Link href={`${BASE_URL}/employees`}>
-              <a>Employees</a>
-            </Link>
+            <Link href={`${BASE_URL}/employees`}>Employees</Link>
           </li>
           <li className={isActive("/management")}>
-            <Link href={`${BASE_URL}/management`}>
-              <a>Management</a>
-            </Link>
+            <Link href={`${BASE_URL}/management`}>Management</Link>
           </li>
         </ul>
       </div>
@@ -115,9 +104,7 @@ const DashboardManagerHeader = () => {
             </a>
           </li>
           <li>
-            <Link href={`${BASE_URL}/settings`}>
-              <a>Settings</a>
-            </Link>
+            <Link href={`${BASE_URL}/settings`}>Settings</Link>
           </li>
           <li>
             <a>Logout</a>

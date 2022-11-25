@@ -7,18 +7,16 @@ const GuestHeader = () => {
         <div className="navbar flex justify-between">
           <ul className="flex items-center space-x-5">
             <li>
-              <Link href="/">
-                <a
-                  role="button"
-                  className="text-3xl font-bold text-secondary transition duration-300 hover:text-white"
-                >
-                  Scheduler
-                </a>
+              <Link
+                href="/"
+                className="text-3xl font-bold text-secondary transition duration-300 hover:text-white"
+              >
+                Scheduler
               </Link>
             </li>
             <li>
-              <Link href="/pricing">
-                <a className=" font-medium">Pricing</a>
+              <Link href="/pricing" className="font-medium">
+                Pricing
               </Link>
             </li>
           </ul>
@@ -30,13 +28,11 @@ const GuestHeader = () => {
               <a className="">Log in</a>
             </li>
             <li>
-              <Link href="/dashboard/manager">
-                <a
-                  role="button"
-                  className="rounded-md bg-secondary py-3 px-6 text-white transition duration-300 hover:bg-secondary"
-                >
-                  Sign up
-                </a>
+              <Link
+                href="/dashboard/manager"
+                className="rounded-md bg-secondary py-3 px-6 text-white transition duration-300 hover:bg-secondary"
+              >
+                Sign up
               </Link>
             </li>
           </ul>
