@@ -1,7 +1,7 @@
 import { type AppType } from "next/app";
 import { type Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
-import { Layout, Header, Footer, Content } from "@components/Layout/index";
+import { Layout, Header, Footer, Content } from "@components/layout";
 
 import { trpc } from "../utils/trpc";
 
