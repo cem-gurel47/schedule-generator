@@ -1,7 +1,7 @@
-import { router, protectedProcedure } from "../trpc";
+import { router, publicProcedure } from "../trpc";
 
 export const shiftsRouter = router({
-  getAllPendingShiftRequests: protectedProcedure.query(() => {
+  getAllPendingShiftRequests: publicProcedure.query(() => {
     return 1;
   }),
 });
