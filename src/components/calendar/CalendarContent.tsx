@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { CalendarContext, BusinessContext } from "@contexts/index";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import CalendarCell from "./CalendarCell";
-import { BusinessClosedCard } from "@components/Card";
+import { BusinessClosedCard } from "@/components/card";
 
 const CalendarContent = () => {
   const { data, loading } = useContext(CalendarContext);
@@ -16,8 +16,8 @@ const CalendarContent = () => {
   return (
     <div className=" w-full bg-base-200">
       {loading ? (
-        <div className="flex justify-center items-center h-96">
-          <div className="animate-pulse ease-linear rounded-full border-8 border-t-8 border-secondary h-24 w-24"></div>
+        <div className="flex h-96 items-center justify-center">
+          <div className="h-24 w-24 animate-pulse rounded-full border-8 border-t-8 border-secondary ease-linear"></div>
         </div>
       ) : (
         <div

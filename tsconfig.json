@@ -19,6 +19,8 @@
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
+      "@contexts/*": ["src/contexts/*"],
+      "@models/*": ["src/types/*"],
       "@utils/*": ["src/utils/*"]
     }
   },
