@@ -1,13 +1,11 @@
 import { useContext } from "react";
 import { CalendarContext, BusinessContext } from "@contexts/index";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import CalendarCell from "./CalendarCell";
 import { BusinessClosedCard } from "@/components/card";
 
 const CalendarContent = () => {
-  const { data, loading } = useContext(CalendarContext);
+  const { data, isLoading } = useContext(CalendarContext);
   const { isClosed } = useContext(BusinessContext);
-  const [parent] = useAutoAnimate<HTMLDivElement>();
 
   if (isClosed) {
     return <BusinessClosedCard />;
@@ -15,13 +13,12 @@ const CalendarContent = () => {
 
   return (
     <div className=" w-full bg-base-200">
-      {loading ? (
+      {isLoading ? (
         <div className="flex h-96 items-center justify-center">
           <div className="h-24 w-24 animate-pulse rounded-full border-8 border-t-8 border-secondary ease-linear"></div>
         </div>
       ) : (
         <div
-          ref={parent}
           className="grid grid-cols-7 gap-2 p-1"
           style={{
             gridTemplateRows: "repeat(9, 48px)",

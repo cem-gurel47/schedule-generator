@@ -8,10 +8,10 @@ import React, {
 import { BusinessContext } from "./BusinessContext";
 import moment from "moment";
 import { trpc } from "@utils/trpc";
-import { Shift } from "@models/types";
+import type { Shift } from "@models/types";
 
 interface CalendarontextInterface {
-  loading: boolean;
+  isLoading: boolean;
   date: moment.Moment | null;
   data: Shift[][];
   selectedDepartment: string | undefined;
@@ -19,8 +19,7 @@ interface CalendarontextInterface {
     React.SetStateAction<string | undefined>
   >;
   setData: React.Dispatch<React.SetStateAction<Shift[][]>>;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
-  setDate: React.Dispatch<React.SetStateAction<moment.Moment | null>>;
+  setDate: React.Dispatch<React.SetStateAction<moment.Moment>>;
   getData: (day: moment.Moment | null) => void;
 }
 
@@ -31,54 +30,54 @@ export const CalendarContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { departments } = useContext(BusinessContext);
-  const [loading, setLoading] = useState(false);
-  const [date, setDate] = useState<moment.Moment | null>(null);
+  const { departments, isLoading: departmentsLoading } =
+    useContext(BusinessContext);
+  const [date, setDate] = useState<moment.Moment>(moment());
   const [data, setData] = useState<Shift[][]>([]);
   const [selectedDepartment, setSelectedDepartment] = useState<
     string | undefined
-  >(departments ? departments[0] : undefined);
+  >(undefined);
 
-  const { refetch } = trpc.useQuery(
-    [
-      "schedule.get-schedule-for-date",
-      { date: date ? date.toDate() : null, department: selectedDepartment },
-    ],
+  const { refetch, isLoading } = trpc.schedule.getScheduleForDate.useQuery(
+    { date: date.toDate(), department: selectedDepartment },
     {
       enabled: false,
     }
   );
 
   const getData = useCallback(async () => {
-    setLoading(true);
     setTimeout(async () => {
       const { data } = await refetch();
       if (data) {
         setData(data.schedule);
       }
-      setLoading(false);
     }, 1000);
   }, [refetch]);
 
   useEffect(() => {
-    if (date) {
+    if (departments) {
+      setSelectedDepartment(departments[0]);
+    }
+  }, [departments]);
+
+  useEffect(() => {
+    if (!departmentsLoading) {
       getData();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [date, selectedDepartment]);
+  }, [date, selectedDepartment, departmentsLoading]);
 
   return (
     <CalendarContext.Provider
       value={{
-        loading,
         date,
         data,
         selectedDepartment,
         setSelectedDepartment,
         setData,
-        setLoading,
         setDate,
         getData,
+        isLoading,
       }}
     >
       {children}

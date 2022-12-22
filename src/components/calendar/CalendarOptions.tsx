@@ -1,6 +1,6 @@
 import { useContext, useMemo } from "react";
 import { CalendarContext, BusinessContext } from "@contexts/index";
-import DirectionalButton from "@/components/Button/DirectionButton";
+import DirectionalButton from "@/components/button/DirectionButton";
 import moment from "moment";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 
@@ -25,15 +25,15 @@ const CalendarOptions = () => {
   };
 
   return (
-    <div className="flex justify-between items-center">
-      <div className="flex gap-4 items-center">
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-4">
         <div className="tooltip" data-tip="Previous week">
           <DirectionalButton direction="left" onClick={handlePrev} />
         </div>
         <div className="tooltip" data-tip="Next week">
           <DirectionalButton direction="right" onClick={handleNext} />
         </div>
-        <p className=" text-secondary text-xl font-medium">{`${date?.format(
+        <p className=" text-xl font-medium text-secondary">{`${date?.format(
           "MMMM"
         )} ${date?.clone().startOf("week").format("DD")}-${date
           ?.clone()
@@ -42,19 +42,21 @@ const CalendarOptions = () => {
       </div>
 
       <div className="flex gap-4">
+        {departments.length > 1 && (
+          <select
+            defaultValue={selectedDepartment}
+            className="min-w-32 select-bordered select"
+            onChange={(e) => setSelectedDepartment(e.target.value)}
+          >
+            {departments.map((department) => (
+              <option key={department} value={department}>
+                {department}
+              </option>
+            ))}
+          </select>
+        )}
         <select
-          defaultValue={selectedDepartment}
-          className="select select-bordered min-w-32"
-          onChange={(e) => setSelectedDepartment(e.target.value)}
-        >
-          {departments.map((department) => (
-            <option key={department} value={department}>
-              {department}
-            </option>
-          ))}
-        </select>
-        <select
-          className="select select-bordered min-w-32"
+          className="min-w-32 select-bordered select"
           onChange={(e) =>
             setDate(
               date?.clone().set("day", Number(e.target.value)) || moment()
@@ -75,10 +77,10 @@ const CalendarOptions = () => {
         </select>
         <button
           onClick={() => getData(date)}
-          className="btn btn-secondary gap-2"
+          className="btn-secondary btn gap-2"
         >
           Generate Work Schedule
-          <PlusCircleIcon className="w-5 h-5" />
+          <PlusCircleIcon className="h-5 w-5" />
         </button>
       </div>
     </div>

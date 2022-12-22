@@ -14,11 +14,6 @@ const GuestHeader = () => {
                 Scheduler
               </Link>
             </li>
-            <li>
-              <Link href="/pricing" className="font-medium">
-                Pricing
-              </Link>
-            </li>
           </ul>
           <ul className="flex items-center space-x-5">
             <li>

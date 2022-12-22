@@ -3,8 +3,8 @@ import CalendarBody from "./CalendarBody";
 
 const Calendar = () => {
   return (
-    <div className="h-full pb-24">
-      <div className="w-full border border-secondary rounded-xl mt-12">
+    <div className=" pb-24">
+      <div className="mt-12 w-full rounded-xl border border-secondary">
         <CalendarHeader />
         <CalendarBody />
       </div>

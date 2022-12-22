@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { trpc } from "@utils/trpc";
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 
 const BASE_URL = "/dashboard/manager";
@@ -9,7 +8,6 @@ const BASE_URL = "/dashboard/manager";
 const DashboardManagerHeader = () => {
   const router = useRouter();
   const { pathname } = router;
-  const { data } = trpc.shifts.getAllPendingShiftRequests.useQuery();
 
   const isActive = (href: string) => {
     if (`${BASE_URL}${href}` === pathname) {
@@ -35,7 +33,7 @@ const DashboardManagerHeader = () => {
           <li className={isActive("")}>
             <Link href={`${BASE_URL}/`}>Work Schedule</Link>
           </li>
-          <li className="dropdown-hover dropdown">
+          {/* <li className="dropdown-hover dropdown">
             <div className="indicator">
               {data && data > 0 && (
                 <span className=" badge-secondary badge indicator-item">
@@ -70,7 +68,7 @@ const DashboardManagerHeader = () => {
                 <Link href={`${BASE_URL}/shift-cancels`}>Shift Cancels</Link>
               </li>
             </ul>
-          </li>
+          </li> */}
           <li className={isActive("/employees")}>
             <Link href={`${BASE_URL}/employees`}>Employees</Link>
           </li>
@@ -79,7 +77,7 @@ const DashboardManagerHeader = () => {
           </li>
         </ul>
       </div>
-      <div className="dropdown-hover dropdown dropdown-end">
+      <div className="dropdown-hover dropdown-end dropdown">
         <label
           tabIndex={0}
           className="btn-ghost btn-circle avatar btn  border-2 hover:border-primary"

@@ -1,8 +1,5 @@
-export { default as PricingCard } from "./Pricing";
 export { default as EmployeeCard } from "./Employee";
-export { default as ShiftChangeRequestCard } from "./ShiftChangeRequest";
-export { default as ShiftCancelRequestCard } from "./ShiftCancelRequest";
-export { default as ShiftSwapRequestCard } from "./ShiftSwapRequest";
+export { default as EmployeeProfileCard } from "./EmployeeProfile";
 export { default as BusinessClosedCard } from "./BusinessClosed";
 export { default as ThemeCard } from "./Theme";
 export { default as BusinessStatisticsCard } from "./BusinessStats";

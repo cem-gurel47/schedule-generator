@@ -1,5 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import Calendar from "@components/calendar/Calendar";
+import CalendarOptions from "@components/calendar/CalendarOptions";
 
 const Dashboard: NextPage = () => {
   return (
@@ -11,7 +13,10 @@ const Dashboard: NextPage = () => {
       </Head>
       <main className="">
         <section className="mt-12 h-full">
-          <p>manager</p>
+          <CalendarOptions />
+          <div className="mt-12 h-full w-full">
+            <Calendar />
+          </div>
         </section>
       </main>
     </>

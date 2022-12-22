@@ -23,7 +23,7 @@ export const BusinessContextProvider = ({
   children: React.ReactNode;
 }) => {
   const { date } = useContext(CalendarContext);
-  const { data, isLoading } = trpc.useQuery(["business.get-business-info"]);
+  const { data, isLoading } = trpc.business.getBusiness.useQuery();
   const dayOfWeek = date ? date.day() : 0;
 
   return (
@@ -47,7 +47,7 @@ export const BusinessContextProvider = ({
               closingHour: null,
               logoURL: "",
               isLoading: true,
-              isClosed: true,
+              isClosed: false,
               departments: [],
             }
       }
