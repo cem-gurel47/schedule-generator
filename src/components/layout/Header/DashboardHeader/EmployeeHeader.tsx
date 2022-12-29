@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { signOut } from "next-auth/react";
 import { useRouter } from "next/router";
-import { trpc } from "@utils/trpc";
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
 
 const BASE_URL = "/dashboard/employee";
@@ -9,13 +9,18 @@ const BASE_URL = "/dashboard/employee";
 const DashboardEmployeeHeader = () => {
   const router = useRouter();
   const { pathname } = router;
-  const { data } = trpc.shifts.getAllPendingShiftRequests.useQuery();
 
   const isActive = (href: string) => {
     if (`${BASE_URL}${href}` === pathname) {
-      return "text-white";
+      return "text-primary";
     }
   };
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/auth/login");
+  };
+
   return (
     <div className="navbar pt-4">
       <div className="flex-1">
@@ -34,7 +39,7 @@ const DashboardEmployeeHeader = () => {
           <li className={isActive("")}>
             <Link href={`${BASE_URL}/`}>Work Schedule</Link>
           </li>
-          <li className="dropdown-hover dropdown">
+          {/* <li className="dropdown-hover dropdown">
             <div className="indicator">
               {data && data > 0 && (
                 <span className="badge-secondary badge indicator-item">
@@ -69,13 +74,18 @@ const DashboardEmployeeHeader = () => {
                 <Link href={`${BASE_URL}/shift-cancels`}>Shift Cancels</Link>
               </li>
             </ul>
-          </li>
+          </li> */}
         </ul>
       </div>
-      <div className="dropdown-hover dropdown dropdown-end">
+      <div className="dropdown-hover dropdown-end dropdown">
         <label tabIndex={0} className="btn-ghost btn-circle avatar btn">
           <div className="w-10 rounded-full">
-            <Image src="https://placeimg.com/80/80/people" alt="profile" />
+            <Image
+              src="https://placeimg.com/80/80/people"
+              alt="profile"
+              layout="fill"
+              className="rounded-full"
+            />
           </div>
         </label>
         <ul
@@ -89,9 +99,9 @@ const DashboardEmployeeHeader = () => {
             </a>
           </li>
           <li>
-            <a>Settings</a>
+            <Link href={`${BASE_URL}/settings`}>Settings</Link>
           </li>
-          <li>
+          <li onClick={handleSignOut}>
             <a>Logout</a>
           </li>
         </ul>

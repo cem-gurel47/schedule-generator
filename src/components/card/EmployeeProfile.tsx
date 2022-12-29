@@ -123,6 +123,10 @@ const EmployeeProfile = ({ employee, state, dispatch }: Props) => {
             </div>
           </div>
         </div>
+        <div className="">
+          <div className="stat-title">Preferred Working Amount</div>
+          <div className="stat-value">15-20 hours</div>
+        </div>
         <div className="card-actions mt-4 justify-end">
           <button className="btn-primary btn" disabled={disabled}>
             SAVE CHANGES

@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { BusinessContext } from "./BusinessContext";
 import moment from "moment";
+import { useSession } from "next-auth/react";
 import { trpc } from "@utils/trpc";
 import type { Shift } from "@models/types";
 
@@ -30,6 +31,7 @@ export const CalendarContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const { status } = useSession();
   const { departments, isLoading: departmentsLoading } =
     useContext(BusinessContext);
   const [date, setDate] = useState<moment.Moment>(moment());
@@ -46,13 +48,15 @@ export const CalendarContextProvider = ({
   );
 
   const getData = useCallback(async () => {
-    setTimeout(async () => {
-      const { data } = await refetch();
-      if (data) {
-        setData(data.schedule);
-      }
-    }, 1000);
-  }, [refetch]);
+    if (status === "authenticated") {
+      setTimeout(async () => {
+        const { data } = await refetch();
+        if (data) {
+          setData(data.schedule);
+        }
+      }, 1000);
+    }
+  }, [refetch, status]);
 
   useEffect(() => {
     if (departments) {

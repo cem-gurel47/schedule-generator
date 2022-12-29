@@ -1,5 +1,6 @@
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { trpc } from "@utils/trpc";
+import { useSession } from "next-auth/react";
 import { CalendarContext } from "./CalendarContext";
 
 interface BusinessContextInterface {
@@ -22,9 +23,21 @@ export const BusinessContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const { status } = useSession();
   const { date } = useContext(CalendarContext);
-  const { data, isLoading } = trpc.business.getBusiness.useQuery();
+  const { data, isLoading, refetch } = trpc.business.getBusiness.useQuery(
+    undefined,
+    {
+      enabled: false,
+    }
+  );
   const dayOfWeek = date ? date.day() : 0;
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      refetch();
+    }
+  }, [status, refetch]);
 
   return (
     <BusinessContext.Provider
@@ -46,7 +59,7 @@ export const BusinessContextProvider = ({
               openingHour: null,
               closingHour: null,
               logoURL: "",
-              isLoading: true,
+              isLoading: status === "authenticated", // if we are authenticated, we are loading. This way guests don't see the loading screen
               isClosed: false,
               departments: [],
             }

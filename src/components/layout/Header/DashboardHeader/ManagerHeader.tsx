@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
+import { signOut } from "next-auth/react";
 
 const BASE_URL = "/dashboard/manager";
 
@@ -13,6 +14,11 @@ const DashboardManagerHeader = () => {
     if (`${BASE_URL}${href}` === pathname) {
       return "text-primary";
     }
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push("/auth/login");
   };
 
   return (
@@ -104,8 +110,8 @@ const DashboardManagerHeader = () => {
           <li>
             <Link href={`${BASE_URL}/settings`}>Settings</Link>
           </li>
-          <li>
-            <a>Logout</a>
+          <li onClick={handleSignOut}>
+            <a>Sign Out</a>
           </li>
         </ul>
       </div>

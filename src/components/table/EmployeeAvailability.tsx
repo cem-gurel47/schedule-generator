@@ -20,8 +20,8 @@ const EmployeeAvailability = ({ hours }: Props) => {
           return (
             <tr key={`business-hours-${index}`}>
               <td>{day}</td>
-              <td>{(hours[index] && hours[index][0]) || "Not Available"}</td>
-              <td>{(hours[index] && hours[index][1]) || "Not Available"}</td>
+              <td>{hours[index]?.at(0) || "Not Available"}</td>
+              <td>{hours[index]?.at(1) || "Not Available"}</td>
             </tr>
           );
         })}

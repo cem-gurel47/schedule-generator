@@ -1,8 +1,8 @@
-import { router, publicProcedure } from "../trpc";
+import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 export const scheduleRouter = router({
-  getScheduleForDate: publicProcedure
+  getScheduleForDate: protectedProcedure
     .input(
       z.object({
         date: z.date(),
@@ -11,7 +11,6 @@ export const scheduleRouter = router({
     )
     .query(({ input }) => {
       const { department } = input;
-      console.log(department, "department");
       if (department === "Men") {
         return {
           schedule: [

@@ -4,7 +4,7 @@ import { trpc } from "@utils/trpc";
 import { useRouter } from "next/router";
 import { EmployeeProfileCard } from "@components/card/index";
 import { EmployeeAvailabilityTable } from "@components/table/index";
-import Calendar from "@components/calendar/Calendar";
+import Calendar from "@components/calendar/employee/EmployeeCalendar";
 
 enum ActionType {
   SET_PRIORITY = "SET_PRIORITY",
@@ -76,8 +76,8 @@ const EmployeeProfilePage = () => {
             <div className="col-span-6">
               <h2 className=" mb-4 text-2xl">Availability:</h2>
               <EmployeeAvailabilityTable hours={[["12:00", "13:00"]]} />
-              <h2 className="text-2xl">Schedule:</h2>
-              <Calendar />
+              <h2 className="mt-4 text-2xl">Schedule:</h2>
+              <Calendar type="profile" name={data.name} />
             </div>
           </div>
         </section>

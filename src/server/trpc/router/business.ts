@@ -1,8 +1,8 @@
-import { router, publicProcedure } from "../trpc";
+import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 export const businessRouter = router({
-  getBusiness: publicProcedure.query(() => {
+  getBusiness: protectedProcedure.query(() => {
     return {
       name: "Petco",
       id: "1",
@@ -20,10 +20,10 @@ export const businessRouter = router({
       departments: ["Men", "Women", "Kids"],
     };
   }),
-  getDepartments: publicProcedure.query(() => {
+  getDepartments: protectedProcedure.query(() => {
     return ["Men", "Women", "Kids"];
   }),
-  getPositions: publicProcedure
+  getPositions: protectedProcedure
     .input(
       z.object({
         department: z.string().nullish(),

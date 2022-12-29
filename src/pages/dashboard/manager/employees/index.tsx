@@ -4,6 +4,8 @@ import { useContext, useState, useEffect } from "react";
 import { BusinessContext } from "@contexts/index";
 import { trpc } from "@utils/trpc";
 import { EmployeeCard } from "@components/card/index";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 const Dashboard: NextPage = () => {
   const { departments } = useContext(BusinessContext);
@@ -27,6 +29,9 @@ const Dashboard: NextPage = () => {
   const { data: positions } = trpc.business.getPositions.useQuery({
     department: selectedDepartment,
   });
+  const filteredEmployees = employees?.filter((employee) =>
+    employee.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   useEffect(() => {
     if (selectedDepartment) {
@@ -83,6 +88,12 @@ const Dashboard: NextPage = () => {
                 ))}
               </select>
             )}
+            <Link href="/dashboard/manager/employees/add">
+              <button className="btn-primary btn gap-2">
+                Add New Employee
+                <PlusCircleIcon className="h-5 w-5" />
+              </button>
+            </Link>
           </div>
         </section>
         {isLoading || !employees ? (
@@ -90,9 +101,10 @@ const Dashboard: NextPage = () => {
         ) : (
           <div>
             <div className="mt-6 grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              {employees.map((employee) => (
-                <EmployeeCard key={employee.id} employee={employee} />
-              ))}
+              {filteredEmployees &&
+                filteredEmployees.map((employee) => (
+                  <EmployeeCard key={employee.id} employee={employee} />
+                ))}
             </div>
           </div>
         )}

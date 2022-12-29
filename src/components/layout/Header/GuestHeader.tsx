@@ -1,4 +1,23 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { CalendarDaysIcon } from "@heroicons/react/20/solid";
+
+const ITEMS = [
+  {
+    href: "/contact",
+    label: "Contact",
+  },
+  {
+    href: "/auth/login",
+    label: "Log in",
+  },
+  {
+    href: "/auth/signup",
+    label: "Sign Up",
+    className:
+      "rounded-md bg-secondary py-3 px-6 text-white transition duration-300 hover:bg-primary",
+  },
+];
 
 const GuestHeader = () => {
   return (
@@ -9,31 +28,48 @@ const GuestHeader = () => {
             <li>
               <Link
                 href="/"
-                className="text-3xl font-bold text-secondary transition duration-300 hover:text-white"
+                className="btn-ghost btn text-2xl normal-case text-secondary"
               >
-                Scheduler
+                <div className="flex items-center space-x-2">
+                  <CalendarDaysIcon className="h-12 w-12" />
+                  <p>Scheduler</p>
+                </div>
               </Link>
             </li>
           </ul>
           <ul className="flex items-center space-x-5">
-            <li>
-              <a>Contact</a>
-            </li>
-            <li>
-              <a className="">Log in</a>
-            </li>
-            <li>
-              <Link
-                href="/dashboard/manager"
-                className="rounded-md bg-secondary py-3 px-6 text-white transition duration-300 hover:bg-secondary"
-              >
-                Sign up
-              </Link>
-            </li>
+            {ITEMS.map((item) => (
+              <ListItem key={item.href} {...item} />
+            ))}
           </ul>
         </div>
       </header>
     </div>
+  );
+};
+
+const ListItem = ({
+  href,
+  label,
+  className,
+}: {
+  href: string;
+  label: string;
+  className?: string;
+}) => {
+  const router = useRouter();
+  const { pathname } = router;
+  const isActive = (href: string) => {
+    if (href === pathname) {
+      return "text-primary";
+    }
+  };
+  return (
+    <li>
+      <Link href={href} className={`${isActive(href)} ${className}`}>
+        {label}
+      </Link>
+    </li>
   );
 };
 

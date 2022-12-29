@@ -4,3 +4,5 @@ export { default as BusinessClosedCard } from "./BusinessClosed";
 export { default as ThemeCard } from "./Theme";
 export { default as BusinessStatisticsCard } from "./BusinessStats";
 export { default as BusinessInfoCard } from "./BusinessInformation";
+export { default as ManagerLoginCard } from "./ManagerLogin";
+export { default as EmployeeLoginCard } from "./EmployeeLogin";

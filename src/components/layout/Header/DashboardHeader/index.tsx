@@ -1,12 +1,11 @@
 import EmployeeHeader from "./EmployeeHeader";
 import ManagerHeader from "./ManagerHeader";
+import { useSession } from "next-auth/react";
 
 const DashboardHeader = () => {
-  const role = "manager";
+  const { data } = useSession();
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  if (role === "employee") {
+  if (data?.user?.role === "employee") {
     return <EmployeeHeader />;
   }
   return <ManagerHeader />;

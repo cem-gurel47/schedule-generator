@@ -17,6 +17,7 @@ type CreateContextOptions = {
 export const createContextInner = async (opts: CreateContextOptions) => {
   return {
     session: opts.session,
+    user: opts.session?.user,
     prisma,
   };
 };
