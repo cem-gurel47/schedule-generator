@@ -10,10 +10,10 @@ const ErrorAlert = ({
 }: {
   error: string;
   description: string;
-  setError: React.Dispatch<React.SetStateAction<string | null>>;
+  setError: React.Dispatch<React.SetStateAction<string | undefined>>;
 }) => {
   const handleDismiss = () => {
-    setError(null);
+    setError(undefined);
   };
 
   return (

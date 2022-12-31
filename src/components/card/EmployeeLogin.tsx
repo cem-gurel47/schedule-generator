@@ -1,26 +1,32 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { signIn, useSession } from "next-auth/react";
-import { ErrorAlert } from "@components/alert/index";
+import { signIn } from "next-auth/react";
+import { ErrorAlert, SuccessAlert } from "@components/alert/index";
 
-const Login = () => {
-  const session = useSession();
-  const [error, setError] = useState<string | null>(null);
+const EmployeeLogin = () => {
+  const [loading, setLoading] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
+    setLoading(true);
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email");
-    const password = formData.get("password");
-    const result = await signIn("credentials", {
+    const result = await signIn("email", {
       email,
-      password,
-      callbackUrl: "/",
       redirect: false,
     });
-    if (result?.error) {
-      setError(result.error);
+    if (result) {
+      if (result.ok) {
+        setIsSuccess(true);
+      } else {
+        setError(result.error);
+      }
+    } else {
+      setError("There was an error sending the email. Please try again.");
     }
+    setLoading(false);
   };
 
   return (
@@ -40,6 +46,18 @@ const Login = () => {
             />
           </div>
 
+          <div className="form-control my-4">
+            <button className={`btn-primary btn ${loading && "loading"}`}>
+              Send login link
+            </button>
+          </div>
+          {isSuccess && (
+            <SuccessAlert
+              title="Email sent!"
+              description="You can sign in with the link in the email."
+            />
+          )}
+
           {error && (
             <ErrorAlert
               error="User not found!"
@@ -47,14 +65,10 @@ const Login = () => {
               setError={setError}
             />
           )}
-
-          <div className="form-control my-3">
-            <button className="btn-primary btn">Send login link</button>
-          </div>
         </form>
       </div>
     </div>
   );
 };
 
-export default Login;
+export default EmployeeLogin;

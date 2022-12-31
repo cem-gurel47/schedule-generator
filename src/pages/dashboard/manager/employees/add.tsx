@@ -6,7 +6,7 @@ import { useState } from "react";
 import { SuccessAlert } from "@components/alert/index";
 // import { BusinessContext } from "@contexts/index";
 // import { trpc } from "@utils/trpc";
-import { CheckBadgeIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { XCircleIcon } from "@heroicons/react/24/outline";
 
 const Dashboard: NextPage = () => {
   //   const [selectedDepartment, setSelectedDepartment] = useState("");
@@ -43,8 +43,7 @@ const SingleEmployeeCreationForm = () => {
     const formData = new FormData(e.target as HTMLFormElement);
 
     const email = formData.get("email");
-    const name = formData.get("name");
-    const response = await signIn("email", { email, name, redirect: false });
+    const response = await signIn("email", { email, redirect: false });
     console.log(response);
     if (response) {
       if (response.ok) {
@@ -67,16 +66,6 @@ const SingleEmployeeCreationForm = () => {
       </p>
       <div className="mt-4 flex w-full">
         <form className="w-full" onSubmit={sendMagicLink}>
-          <div className="flex flex-col justify-end">
-            <label htmlFor="name">Name</label>
-            <input
-              required
-              type="text"
-              name="name"
-              id="name"
-              className="input-primary input"
-            />
-          </div>
           <div className="flex flex-col gap-2">
             <label htmlFor="email">Email</label>
             <input
@@ -95,7 +84,6 @@ const SingleEmployeeCreationForm = () => {
           </button>
           {isSuccess && (
             <SuccessAlert
-              icon={<CheckBadgeIcon className="h-6 w-6" />}
               title="Success!"
               description="We sent an email to the employee with a link to set up their account."
               actionsContainer={

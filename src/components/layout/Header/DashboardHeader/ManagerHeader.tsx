@@ -2,11 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 const BASE_URL = "/dashboard/manager";
 
 const DashboardManagerHeader = () => {
+  const { data: session } = useSession();
+  console.log(session);
+
   const router = useRouter();
   const { pathname } = router;
 
