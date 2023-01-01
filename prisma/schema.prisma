@@ -57,7 +57,24 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  // businessId    String?
 }
+
+model Business {
+  id            String    @id @default(cuid())
+  name          String
+  image         String
+
+}
+
+// model BusinessUsers {
+//   id            String    @id @default(cuid())
+//   businessId    String
+//   userId        String
+//   business      Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
+//   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   @@unique([businessId, userId])
+// }
 
 model VerificationToken {
   identifier String

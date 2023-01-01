@@ -1,7 +1,7 @@
 import type { NextPage } from "next";
 import Head from "next/head";
 import Calendar from "@components/calendar/employee/EmployeeCalendar";
-import CalendarOptions from "@components/calendar/CalendarOptions";
+import CalendarOptions from "@components/calendar/employee/EmployeeCalendarOptions";
 
 const EmployeeProfile: NextPage = () => {
   return (

@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 const DashboardHeader = () => {
   const { data } = useSession();
 
-  if (data?.user?.role === "employee") {
+  if (data?.user?.role !== "employee") {
     return <EmployeeHeader />;
   }
   return <ManagerHeader />;
