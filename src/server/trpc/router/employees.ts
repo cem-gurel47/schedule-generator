@@ -56,16 +56,14 @@ export const employeeRouter = router({
         id: z.string(),
       })
     )
-    .query(({ input }) => {
+    .query(async ({ ctx, input }) => {
       const { id } = input;
-      return {
-        name: "John Doe",
-        id,
-        position: "Cashier",
-        department: "Men",
-        email: "john@gmail.com",
-        phone: "1234567890",
-        priority: 5,
-      };
+      const employee = await ctx.prisma.user.findUnique({
+        where: {
+          id,
+        },
+      });
+
+      return employee;
     }),
 });

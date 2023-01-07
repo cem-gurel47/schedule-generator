@@ -49,12 +49,10 @@ export const CalendarContextProvider = ({
 
   const getData = useCallback(async () => {
     if (status === "authenticated") {
-      setTimeout(async () => {
-        const { data } = await refetch();
-        if (data) {
-          setData(data.schedule);
-        }
-      }, 1000);
+      const { data } = await refetch();
+      if (data) {
+        setData(data.schedule);
+      }
     }
   }, [refetch, status]);
 

@@ -2,12 +2,9 @@ import { useState } from "react";
 import type { NextPage } from "next";
 import Head from "next/head";
 import { ManagerLoginCard, EmployeeLoginCard } from "@components/card";
-import { useSession } from "next-auth/react";
 
 const LoginPage: NextPage = () => {
   const [userType, setUserType] = useState<"manager" | "employee">("manager");
-  const { data: session } = useSession();
-  console.log(session);
 
   return (
     <>

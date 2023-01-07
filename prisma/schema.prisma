@@ -49,31 +49,35 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
-  role          String  @default("employee")  
+  role          String    @default("employee")
   name          String?
   email         String?   @unique
-  password      String?   
+  password      String?
   emailVerified DateTime?
   image         String?
   accounts      Account[]
   sessions      Session[]
-  // businessId    String?
+  businessId    String?
 }
 
 model Business {
-  id            String    @id @default(cuid())
+  id            String          @id @default(cuid())
   name          String
   image         String?
+  departments   String[]       @default([])
+  openingHours  String[]       @default([])
+  closingHours  String[]       @default([])
+  businessUsers BusinessUsers[]
 }
 
-// model BusinessUsers {
-//   id            String    @id @default(cuid())
-//   businessId    String
-//   userId        String
-//   business      Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
-//   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-//   @@unique([businessId, userId])
-// }
+model BusinessUsers {
+  id         String   @id @default(cuid())
+  businessId String
+  userId     String
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@unique([businessId, userId])
+}
 
 model VerificationToken {
   identifier String

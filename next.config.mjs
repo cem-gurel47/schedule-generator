@@ -14,7 +14,7 @@ const config = {
     defaultLocale: "en",
   },
   images: {
-    domains: ["placeimg.com"],
+    domains: ["placeimg.com", "s3.amazonaws.com", "t3.ftcdn.net"],
   },
 };
 export default config;

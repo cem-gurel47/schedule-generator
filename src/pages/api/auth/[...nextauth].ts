@@ -5,7 +5,7 @@ import EmailProvider from "next-auth/providers/email";
 // Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { createTransport } from "nodemailer";
-// import bcrypt from "bcryptjs";
+import bcrypt from "bcryptjs";
 
 import { env } from "../../../env/server.mjs";
 import { prisma } from "../../../server/db/client";
@@ -65,6 +65,7 @@ function text({ url, host }: { url: string; host: string }) {
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
+  secret: env.NEXTAUTH_SECRET,
   session: {
     strategy: "jwt",
   },
@@ -77,7 +78,6 @@ export const authOptions: NextAuthOptions = {
         };
         return Promise.resolve(newToken);
       }
-
       return Promise.resolve(token);
     },
 
@@ -110,31 +110,19 @@ export const authOptions: NextAuthOptions = {
         }
         const { email, password } = credentials;
 
-        if (email === "manager@manager.com" && password === "manager") {
-          return {
-            id: "1",
-            email,
-            name: "Manager Test",
-            role: "manager",
-            image: null,
-          } as User;
+        const user = await prisma.user.findUnique({
+          where: {
+            email: email,
+          },
+        });
+        if (!user) {
+          return null;
         }
-        return null;
-
-        // const user = await prisma.user.findUnique({
-        //   where: {
-        //     email: email,
-        //   },
-        // });
-        // if (!user) {
-        //   return null;
-        // }
-        // const isValid = await bcrypt.compare(password, user.password);
-        // if (!isValid) {
-        //   console.log("invalid password");
-        //   throw new Error("invalid-password");
-        // }
-        // return user;
+        const isValid = await bcrypt.compare(password, user.password || "");
+        if (!isValid) {
+          throw new Error("invalid-password");
+        }
+        return user as User;
       },
     }),
     EmailProvider({

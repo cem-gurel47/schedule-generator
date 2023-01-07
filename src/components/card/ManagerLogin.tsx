@@ -1,13 +1,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { FormEvent } from "react";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { ErrorAlert } from "@components/alert/index";
 import { useRouter } from "next/router";
 
 const Login = () => {
+  const session = useSession();
+  console.log(session);
   const router = useRouter();
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | undefined>(undefined);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,7 +29,8 @@ const Login = () => {
       setError(result.error);
     }
     if (result.ok) {
-      router.push("/dashboard/manager");
+      console.log(result);
+      // router.push("/dashboard/manager");
     }
   };
 

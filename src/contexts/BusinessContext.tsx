@@ -1,19 +1,21 @@
-import { createContext, useContext, useEffect } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { trpc } from "@utils/trpc";
 import { useSession } from "next-auth/react";
 import { CalendarContext } from "./CalendarContext";
+import { useRouter } from "next/router";
 
 interface BusinessContextInterface {
   name: string;
   id: string;
-  openingHours: (string | null)[]; // opening hours for each day of the week. Null means closed
-  closingHours: (string | null)[]; // closing hours for each day of the week. Null means closed
-  openingHour: string | null;
-  closingHour: string | null;
+  openingHours: string[]; // opening hours for each day of the week. empty string means closed
+  closingHours: string[];
+  openingHour: string;
+  closingHour: string;
   isClosed: boolean;
-  logoURL: string;
+  image: string | null;
   isLoading: boolean;
   departments: string[];
+  isMissingInformation: boolean;
 }
 
 export const BusinessContext = createContext({} as BusinessContextInterface);
@@ -23,7 +25,8 @@ export const BusinessContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { status } = useSession();
+  const router = useRouter();
+  const session = useSession();
   const { date } = useContext(CalendarContext);
   const { data, isLoading, refetch } = trpc.business.getBusiness.useQuery(
     undefined,
@@ -32,12 +35,27 @@ export const BusinessContextProvider = ({
     }
   );
   const dayOfWeek = date ? date.day() : 0;
+  const [isMissingInformation, setIsMissingInformation] = useState(false);
 
   useEffect(() => {
-    if (status === "authenticated") {
+    if (session.status === "authenticated") {
       refetch();
     }
-  }, [status, refetch]);
+  }, [session, refetch]);
+
+  useEffect(() => {
+    if (data) {
+      if (
+        (data.openingHours.length === 0 ||
+          data.closingHours.length === 0 ||
+          data.image === null) &&
+        router.pathname !== "/dashboard/manager/management"
+      ) {
+        setIsMissingInformation(true);
+        router.push("/dashboard/manager/management");
+      }
+    }
+  }, [router, data]);
 
   return (
     <BusinessContext.Provider
@@ -45,23 +63,24 @@ export const BusinessContextProvider = ({
         data
           ? {
               ...data,
-              openingHour: data.openingHours[dayOfWeek] || null,
-              closingHour: data.closingHours[dayOfWeek] || null,
-              isClosed:
-                !data.openingHours[dayOfWeek] || !data.closingHours[dayOfWeek],
+              isClosed: data.openingHours[dayOfWeek] === null,
               isLoading,
+              openingHour: data.openingHours[dayOfWeek] || "",
+              closingHour: data.closingHours[dayOfWeek] || "",
+              isMissingInformation,
             }
           : {
               name: "",
               id: "",
               openingHours: [],
               closingHours: [],
-              openingHour: null,
-              closingHour: null,
-              logoURL: "",
-              isLoading: status === "authenticated", // if we are authenticated, we are loading. This way guests don't see the loading screen
+              openingHour: "",
+              closingHour: "",
+              image: "",
+              isLoading: session.status === "authenticated", // if we are authenticated, we are loading. This way guests don't see the loading screen
               isClosed: false,
               departments: [],
+              isMissingInformation,
             }
       }
     >

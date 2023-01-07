@@ -1,16 +1,12 @@
 import { useContext } from "react";
 import { BusinessContext } from "@contexts/index";
+import { BusinessStatisticsCard } from "./index";
 
 const BusinessInformation = () => {
-  const { name, departments } = useContext(BusinessContext);
+  const { departments } = useContext(BusinessContext);
   return (
-    <div className="card glass">
-      <div className="card-body">
-        <p>Name: {name}</p>
-        {departments.map((department) => {
-          return <div key={`department-${department}`}>{department}</div>;
-        })}
-      </div>
+    <div className="card bg-base-100 shadow-2xl">
+      <BusinessStatisticsCard />
     </div>
   );
 };

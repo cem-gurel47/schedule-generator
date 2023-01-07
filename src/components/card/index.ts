@@ -8,3 +8,4 @@ export { default as ManagerLoginCard } from "./ManagerLogin";
 export { default as EmployeeLoginCard } from "./EmployeeLogin";
 export { default as BusinessSignupFormCard } from "./BusinessSignupForm";
 export { default as ManagerSignupFormCard } from "./ManagerSignupForm";
+export { default as BusinessImageCard } from "./BusinessImage";

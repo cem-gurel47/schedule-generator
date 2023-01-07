@@ -27,6 +27,18 @@ const ManagerSignupForm = () => {
             className="input-bordered input-primary input mt-1 w-full"
           />
         </div>
+        <div className="mt-2 flex w-full flex-col items-baseline">
+          <label htmlFor="confirmPassword" className="text-sm text-gray-500">
+            Confirm Password*
+          </label>
+          <input
+            required
+            type="password"
+            name="confirmPassword"
+            id="confirmPassword"
+            className="input-bordered input-primary input mt-1 w-full"
+          />
+        </div>
       </div>
     </div>
   );

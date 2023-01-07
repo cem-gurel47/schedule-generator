@@ -5,14 +5,14 @@
 const BusinessStats = () => {
   // const { name, logoURL, isClosed } = useContext(BusinessContext);
   return (
-    <div className="stats shadow mt-6">
+    <div className="stats stats-vertical mt-6 shadow">
       <div className="stat">
         <div className="stat-figure text-primary">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            className="inline-block w-8 h-8 stroke-current"
+            className="inline-block h-8 w-8 stroke-current"
           >
             <path
               strokeLinecap="round"
@@ -33,7 +33,7 @@ const BusinessStats = () => {
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
-            className="inline-block w-8 h-8 stroke-current"
+            className="inline-block h-8 w-8 stroke-current"
           >
             <path
               strokeLinecap="round"
@@ -50,7 +50,7 @@ const BusinessStats = () => {
 
       <div className="stat">
         <div className="stat-figure text-secondary">
-          <div className="avatar online">
+          <div className="online avatar">
             <div className="w-16 rounded-full">
               <img
                 src="https://placeimg.com/128/128/people"

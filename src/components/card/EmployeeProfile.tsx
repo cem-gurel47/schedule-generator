@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import React from "react";
+import React, { useContext } from "react";
+import { BusinessContext } from "@contexts/index";
 import type { Employee } from "@models/types";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { trpc } from "@utils/trpc";
@@ -31,7 +32,7 @@ const EmployeeProfile = ({ employee, state, dispatch }: Props) => {
   const { data: positions } = trpc.business.getPositions.useQuery({
     department: employee.department,
   });
-  const { data: departments } = trpc.business.getDepartments.useQuery();
+  const { departments } = useContext(BusinessContext);
   const disabled =
     state.department === employee.department &&
     state.position === employee.position &&

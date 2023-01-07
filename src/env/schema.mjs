@@ -32,6 +32,10 @@ export const serverSchema = z.object({
  */
 export const clientSchema = z.object({
   // NEXT_PUBLIC_BAR: z.string(),
+  NEXT_PUBLIC_AWS_ACCESS_KEY: z.string(),
+  NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY: z.string(),
+  NEXT_PUBLIC_AWS_REGION: z.string(),
+  NEXT_PUBLIC_AWS_BUCKET_NAME: z.string(),
 });
 
 /**
@@ -42,4 +46,9 @@ export const clientSchema = z.object({
  */
 export const clientEnv = {
   // NEXT_PUBLIC_BAR: process.env.NEXT_PUBLIC_BAR,
+  NEXT_PUBLIC_AWS_ACCESS_KEY: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY,
+  NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY:
+    process.env.NEXT_PUBLIC_AWS_SECRET_ACCESS_KEY,
+  NEXT_PUBLIC_AWS_REGION: process.env.NEXT_PUBLIC_AWS_REGION,
+  NEXT_PUBLIC_AWS_BUCKET_NAME: process.env.NEXT_PUBLIC_AWS_BUCKET_NAME,
 };

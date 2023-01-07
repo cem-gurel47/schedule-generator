@@ -2,27 +2,72 @@ import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 export const businessRouter = router({
-  getBusiness: protectedProcedure.query(() => {
-    return {
-      name: "Petco",
-      id: "1",
-      openingHours: ["9:00", "9:00", "9:00", "9:00", "9:00", "9:00", null],
-      closingHours: [
-        "17:00",
-        "17:00",
-        "17:00",
-        "17:00",
-        "17:00",
-        "17:00",
-        null,
-      ],
-      logoURL: "https://placeimg.com/200/200/nature",
-      departments: ["Men", "Women", "Kids"],
-    };
+  getBusiness: protectedProcedure.query(async ({ ctx }) => {
+    const business = await ctx.prisma.business.findUnique({
+      where: {
+        id: ctx.session.user.businessId,
+      },
+    });
+
+    return business;
   }),
-  getDepartments: protectedProcedure.query(() => {
-    return ["Men", "Women", "Kids"];
-  }),
+  updateBusiness: protectedProcedure
+    .input(
+      z.object({
+        name: z.string().optional(),
+        departments: z.array(z.string()).optional(),
+        openingHours: z.array(z.string()).optional(),
+        closingHours: z.array(z.string()).optional(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const business = await ctx.prisma.business.update({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+        data: {
+          ...input,
+        },
+      });
+
+      return business;
+    }),
+  updateBusinessImage: protectedProcedure
+    .input(
+      z.object({
+        imageLink: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const business = await ctx.prisma.business.update({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+        data: {
+          image: input.imageLink,
+        },
+      });
+      return business;
+    }),
+  updateBusinessHours: protectedProcedure
+    .input(
+      z.object({
+        openingHours: z.array(z.string()),
+        closingHours: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const business = await ctx.prisma.business.update({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+        data: {
+          ...input,
+        },
+      });
+
+      return business;
+    }),
   getPositions: protectedProcedure
     .input(
       z.object({
