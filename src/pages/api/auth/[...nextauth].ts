@@ -146,6 +146,8 @@ export const authOptions: NextAuthOptions = {
           throw new Error(`Email(s) (${failed.join(", ")}) could not be sent`);
         }
       },
+
+      // when the user clicks the link in the email, below function is called
     }),
   ],
   pages: {

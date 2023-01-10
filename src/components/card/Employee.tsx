@@ -7,15 +7,14 @@ type Props = {
 };
 
 function Employee({ employee }: Props) {
-  const { name, email, phone, position, department, id } = employee;
+  const { name, email, position, department, id } = employee;
   return (
-    <div className="card-bordered card  bg-primary shadow-xl">
-      <div className="card-body text-base-100">
+    <div className="card-bordered card bg-base-100 shadow-xl">
+      <div className="card-body">
         <h2 className="card-title ">{name}</h2>
         <h3 className="card-subtitle">{position}</h3>
         {department && <p className="card-text">{department}</p>}
         <p>{email}</p>
-        <p>{phone}</p>
 
         <div className="card-actions">
           <div className="flex w-full justify-end">

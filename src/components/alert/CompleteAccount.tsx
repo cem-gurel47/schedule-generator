@@ -3,9 +3,9 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 
 const CompleteAccount = () => {
   return (
-    <div className="absolute bottom-20 right-10">
+    <div className="bottom-15 absolute right-5">
       <Link href="/dashboard/employee/profile">
-        <div className="alert alert-warning shadow-lg">
+        <div className="alert alert-warning flex flex-col shadow-lg">
           <div>
             <ExclamationTriangleIcon className="h-6 w-6" />
             <div className="flex flex-col items-baseline">

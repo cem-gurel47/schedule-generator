@@ -13,7 +13,8 @@ type Props = {
 function Content({ children }: Props) {
   const router = useRouter();
   const { data, status } = useSession();
-  const { isLoading } = useContext(BusinessContext);
+  const { isLoading, image, openingHours, closingHours } =
+    useContext(BusinessContext);
   const developmentEnv = process.env.NODE_ENV === "development";
   const [showCompleteAccountAlert, setShowCompleteAccountAlert] =
     useState(false);
@@ -44,10 +45,15 @@ function Content({ children }: Props) {
   }, [data, status, router, developmentEnv]);
 
   useEffect(() => {
-    if (data?.user?.role === "employee") {
+    if (
+      data?.user?.role === "manager" &&
+      (!image || openingHours.length === 0 || closingHours.length === 0)
+    ) {
       setShowCompleteAccountAlert(true);
+    } else {
+      setShowCompleteAccountAlert(false);
     }
-  }, [data]);
+  }, [closingHours.length, data, image, openingHours]);
 
   if (isLoading) {
     return <Loading />;

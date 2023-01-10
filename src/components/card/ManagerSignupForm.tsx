@@ -4,7 +4,17 @@ const ManagerSignupForm = () => {
       <h1 className="text-2xl font-bold">Account Information</h1>
       <div className="flex flex-col items-center">
         <div className="flex w-full flex-col items-baseline">
-          <label htmlFor="email" className="text-sm text-gray-500">
+          <label htmlFor="Name" className="text-sm text-gray-500">
+            Name*
+          </label>
+          <input
+            required
+            type="text"
+            name="name"
+            id="name"
+            className="input-bordered input mt-1 w-full"
+          />
+          <label htmlFor="email" className="mt-2 text-sm text-gray-500">
             Email*
           </label>
           <input
@@ -12,7 +22,7 @@ const ManagerSignupForm = () => {
             type="email"
             name="email"
             id="email"
-            className="input-bordered input-primary input mt-1 w-full"
+            className="input-bordered input mt-1 w-full"
           />
         </div>
         <div className="mt-2 flex w-full flex-col items-baseline">
@@ -24,7 +34,7 @@ const ManagerSignupForm = () => {
             type="password"
             name="password"
             id="password"
-            className="input-bordered input-primary input mt-1 w-full"
+            className="input-bordered input mt-1 w-full"
           />
         </div>
         <div className="mt-2 flex w-full flex-col items-baseline">
@@ -36,7 +46,7 @@ const ManagerSignupForm = () => {
             type="password"
             name="confirmPassword"
             id="confirmPassword"
-            className="input-bordered input-primary input mt-1 w-full"
+            className="input-bordered  input mt-1 w-full"
           />
         </div>
       </div>

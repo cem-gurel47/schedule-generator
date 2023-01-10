@@ -1,11 +1,10 @@
 export type Employee = {
-  name: string;
+  name: string | null;
   id: string;
   position: string;
-  department?: string;
+  department: string;
   email: string;
-  phone: string;
-  priority?: number;
+  priority: number;
 };
 
 export type Shift = {

@@ -12,7 +12,7 @@ const BusinessSignupForm = () => {
             type="text"
             name="businessName"
             id="businessName"
-            className="input-bordered input-primary input mt-1 w-full"
+            className="input-bordered input mt-1 w-full"
           />
         </div>
       </div>

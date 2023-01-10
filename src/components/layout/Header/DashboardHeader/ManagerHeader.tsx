@@ -1,15 +1,15 @@
+import { useContext } from "react";
+import { BusinessContext } from "@contexts/index";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { CalendarDaysIcon } from "@heroicons/react/20/solid";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 
 const BASE_URL = "/dashboard/manager";
 
 const DashboardManagerHeader = () => {
-  const { data: session } = useSession();
-  console.log(session);
-
+  const { image } = useContext(BusinessContext);
   const router = useRouter();
   const { pathname } = router;
 
@@ -93,7 +93,10 @@ const DashboardManagerHeader = () => {
         >
           <div className="w-10 rounded-full ">
             <Image
-              src="https://placeimg.com/80/80/people"
+              src={
+                image ||
+                "https://t3.ftcdn.net/jpg/04/34/72/82/240_F_434728286_OWQQvAFoXZLdGHlObozsolNeuSxhpr84.jpg"
+              }
               alt="profile"
               layout="fill"
               className="rounded-full"

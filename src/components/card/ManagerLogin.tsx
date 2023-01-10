@@ -1,14 +1,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import type { FormEvent } from "react";
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { ErrorAlert } from "@components/alert/index";
-import { useRouter } from "next/router";
 
 const Login = () => {
-  const session = useSession();
-  console.log(session);
-  const router = useRouter();
   const [error, setError] = useState<string | undefined>(undefined);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {

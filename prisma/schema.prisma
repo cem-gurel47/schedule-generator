@@ -50,25 +50,49 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   role          String    @default("employee")
-  name          String?
-  email         String?   @unique
+  name          String
+  email         String   @unique
   password      String?
   emailVerified DateTime?
-  image         String?
+  image         String    @default("")
   accounts      Account[]
   sessions      Session[]
-  businessId    String?
+  businessId    String
+  department    String   @default("") 
+  position      String   @default("")
+  priority      Int      @default(1)
+  minHours      Int      @default(0)
+  maxHours      Int      @default(0)
+  startingHours Int[]   @default([])
+  endingHours   Int[]   @default([])
 }
 
 model Business {
   id            String          @id @default(cuid())
   name          String
   image         String?
-  departments   String[]       @default([])
   openingHours  String[]       @default([])
   closingHours  String[]       @default([])
-  businessUsers BusinessUsers[]
+  businessUsers BusinessUsers[] 
+  departments   String[]
+  positions     String[]
 }
+
+// model Department {
+//   id            String          @id @default(cuid())
+//   name          String
+//   businessId    String
+//   business      Business        @relation(fields: [businessId], references: [id], onDelete: Cascade)
+//   users         User[]
+// }
+
+// model Position {
+//   id            String          @id @default(cuid())
+//   name          String
+//   businessId    String
+//   business      Business        @relation(fields: [businessId], references: [id], onDelete: Cascade)
+//   users         User[]
+// }
 
 model BusinessUsers {
   id         String   @id @default(cuid())

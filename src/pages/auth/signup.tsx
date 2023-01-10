@@ -1,5 +1,4 @@
 import type { NextPage } from "next";
-import { useState } from "react";
 import type { FormEvent } from "react";
 import Head from "next/head";
 import Link from "next/link";
@@ -13,34 +12,36 @@ import { useRouter } from "next/router";
 
 const SignupPage: NextPage = () => {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const { mutate, data } =
+  const { mutate, isLoading } =
     trpc.auth.createBusinessAndManagerAccount.useMutation();
 
   const handleSignUp = async (e: FormEvent<HTMLFormElement>) => {
-    setLoading(true);
     e.preventDefault();
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email")?.toString();
     const password = formData.get("password")?.toString();
+    const name = formData.get("name")?.toString();
     const businessName = formData.get("businessName");
-    if (!email || !password || !businessName) return;
+    if (!email || !password || !businessName || !name) return;
 
-    mutate({
-      email: email.toString(),
-      password: password.toString(),
-      businessName: businessName.toString(),
-    });
-    if (data) {
-      await signIn("credentials", {
-        email: data.email,
-        password: data.password,
-        redirect: false,
-      });
-
-      router.push("/dashboard/manager");
-    }
-    setLoading(false);
+    mutate(
+      {
+        name: name.toString(),
+        email: email.toString(),
+        password: password.toString(),
+        businessName: businessName.toString(),
+      },
+      {
+        onSuccess: async (data) => {
+          await signIn("credentials", {
+            email: data.email,
+            password: data.password,
+            redirect: false,
+          });
+          router.push("/");
+        },
+      }
+    );
   };
   return (
     <>
@@ -67,10 +68,10 @@ const SignupPage: NextPage = () => {
             <ManagerSignupFormCard />
             <div className="col-span-2 mt-4">
               <button
-                className={`btn-primary btn ${loading && "loading"}`}
+                className={`btn-primary btn ${isLoading && "loading"}`}
                 type="submit"
               >
-                <span>Signup</span>
+                Signup
               </button>
             </div>
           </form>

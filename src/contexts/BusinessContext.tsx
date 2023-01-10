@@ -16,6 +16,9 @@ interface BusinessContextInterface {
   isLoading: boolean;
   departments: string[];
   isMissingInformation: boolean;
+  positions: string[];
+  setDepartments: React.Dispatch<React.SetStateAction<string[]>>;
+  setImage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 export const BusinessContext = createContext({} as BusinessContextInterface);
@@ -36,12 +39,21 @@ export const BusinessContextProvider = ({
   );
   const dayOfWeek = date ? date.day() : 0;
   const [isMissingInformation, setIsMissingInformation] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
+  const [departments, setDepartments] = useState<string[]>([]);
 
   useEffect(() => {
     if (session.status === "authenticated") {
       refetch();
     }
   }, [session, refetch]);
+
+  useEffect(() => {
+    if (data) {
+      setImage(data.image);
+      setDepartments(data.departments);
+    }
+  }, [data]);
 
   useEffect(() => {
     if (data) {
@@ -63,11 +75,15 @@ export const BusinessContextProvider = ({
         data
           ? {
               ...data,
+              image,
+              departments,
               isClosed: data.openingHours[dayOfWeek] === null,
               isLoading,
               openingHour: data.openingHours[dayOfWeek] || "",
               closingHour: data.closingHours[dayOfWeek] || "",
               isMissingInformation,
+              setDepartments,
+              setImage,
             }
           : {
               name: "",
@@ -81,6 +97,9 @@ export const BusinessContextProvider = ({
               isClosed: false,
               departments: [],
               isMissingInformation,
+              setDepartments,
+              setImage,
+              positions: [],
             }
       }
     >

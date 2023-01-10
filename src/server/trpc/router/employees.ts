@@ -1,56 +1,62 @@
-import { router, publicProcedure } from "../trpc";
+import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 
 export const employeeRouter = router({
-  getEmployees: publicProcedure
+  getEmployees: protectedProcedure
     .input(
       z.object({
         department: z.string().nullish(),
         position: z.string().nullish(),
       })
     )
-    .query(({ input }) => {
-      if (input.department === "Men") {
-        return [
-          {
-            name: "John Doe",
-            id: "1",
-            position: "Cashier",
-            department: "Men",
-            email: "johndoe@gmail.com",
-            phone: "1234567890",
+    .query(async ({ input, ctx }) => {
+      const { department, position } = input;
+
+      return await ctx.prisma.user.findMany({
+        where: {
+          department: {
+            equals: department || undefined,
           },
-        ];
-      } else if (input.department === "Women") {
-        return [
-          {
-            name: "Jane Doe",
-            id: "2",
-            position: "Cashier",
-            department: "Women",
-            email: "janedoe@gmail.com",
-            phone: "1234567890",
+          position: {
+            equals: position || undefined,
           },
-        ];
-      }
-      return [
-        {
-          name: "Jill Doe",
-          id: "6",
-          position: "Doctor",
-          email: "jilldoe@gmail.com",
-          phone: "1234567890",
         },
-        {
-          name: "Jack Doe",
-          id: "5",
-          position: "Doctor",
-          email: "jackdoe@gmail.com",
-          phone: "1234567890",
-        },
-      ];
+      });
     }),
-  getEmployee: publicProcedure
+  createEmployee: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+        email: z.string(),
+        department: z.string().nullish(),
+        position: z.string().nullish(),
+        businessId: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { name, email, department, position, businessId } = input;
+
+      const userData = {
+        name,
+        email,
+        businessId,
+      };
+
+      if (department) {
+        Object.assign(userData, { department });
+      }
+
+      if (position) {
+        Object.assign(userData, { position });
+      }
+
+      const employee = await ctx.prisma.user.create({
+        data: userData,
+      });
+
+      return employee;
+    }),
+  getEmployee: protectedProcedure
     .input(
       z.object({
         id: z.string(),

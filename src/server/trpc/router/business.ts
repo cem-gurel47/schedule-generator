@@ -11,27 +11,7 @@ export const businessRouter = router({
 
     return business;
   }),
-  updateBusiness: protectedProcedure
-    .input(
-      z.object({
-        name: z.string().optional(),
-        departments: z.array(z.string()).optional(),
-        openingHours: z.array(z.string()).optional(),
-        closingHours: z.array(z.string()).optional(),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const business = await ctx.prisma.business.update({
-        where: {
-          id: ctx.session.user.businessId,
-        },
-        data: {
-          ...input,
-        },
-      });
 
-      return business;
-    }),
   updateBusinessImage: protectedProcedure
     .input(
       z.object({
@@ -68,19 +48,86 @@ export const businessRouter = router({
 
       return business;
     }),
-  getPositions: protectedProcedure
+
+  addNewDepartment: protectedProcedure
     .input(
       z.object({
-        department: z.string().nullish(),
+        name: z.string(),
       })
     )
-    .query(({ input }) => {
-      const { department } = input;
-      if (department === "Men") {
-        return ["Cashier", "Doctor", "Nurse"];
-      }
-      if (department === "Women") {
-        return ["Receptionist", "Pilot"];
-      }
+    .mutation(async ({ ctx, input }) => {
+      const business = await ctx.prisma.business.update({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+        data: {
+          departments: {
+            push: input.name,
+          },
+        },
+      });
+
+      return business;
+    }),
+  deleteDepartment: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const businessDepartments = await ctx.prisma.business.findUnique({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+      });
+
+      const newDepartments = businessDepartments?.departments.filter(
+        (department) => department !== input.name
+      );
+
+      const business = await ctx.prisma.business.update({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+        data: {
+          departments: newDepartments,
+        },
+      });
+
+      return business;
+    }),
+  editDepartment: protectedProcedure
+    .input(
+      z.object({
+        oldName: z.string(),
+        newName: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const businessDepartments = await ctx.prisma.business.findUnique({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+      });
+
+      const newDepartments = businessDepartments?.departments.map(
+        (department) => {
+          if (department === input.oldName) {
+            return input.newName;
+          }
+          return department;
+        }
+      );
+      const business = await ctx.prisma.business.update({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+        data: {
+          departments: newDepartments,
+        },
+      });
+
+      return business;
     }),
 });

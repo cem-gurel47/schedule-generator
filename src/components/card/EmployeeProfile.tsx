@@ -3,7 +3,6 @@ import React, { useContext } from "react";
 import { BusinessContext } from "@contexts/index";
 import type { Employee } from "@models/types";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { trpc } from "@utils/trpc";
 
 enum ActionType {
   SET_PRIORITY = "SET_PRIORITY",
@@ -29,9 +28,6 @@ type Props = {
 };
 
 const EmployeeProfile = ({ employee, state, dispatch }: Props) => {
-  const { data: positions } = trpc.business.getPositions.useQuery({
-    department: employee.department,
-  });
   const { departments } = useContext(BusinessContext);
   const disabled =
     state.department === employee.department &&
@@ -55,8 +51,7 @@ const EmployeeProfile = ({ employee, state, dispatch }: Props) => {
           )}
         </h2>
         <p>{employee.email}</p>
-        <p>{employee.phone}</p>
-        <select
+        {/* <select
           className="select-bordered select"
           value={state.position}
           onChange={(e) => {
@@ -71,7 +66,7 @@ const EmployeeProfile = ({ employee, state, dispatch }: Props) => {
               {position}
             </option>
           ))}
-        </select>
+        </select> */}
         {departments && (
           <select
             className="select-bordered select"

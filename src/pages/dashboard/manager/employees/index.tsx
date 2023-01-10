@@ -6,9 +6,11 @@ import { trpc } from "@utils/trpc";
 import { EmployeeCard } from "@components/card/index";
 import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const Dashboard: NextPage = () => {
-  const { departments } = useContext(BusinessContext);
+  const { data: user } = useSession();
+  const { departments, positions } = useContext(BusinessContext);
 
   const [selectedDepartment, setSelectedDepartment] = useState<
     string | null | undefined
@@ -26,18 +28,23 @@ const Dashboard: NextPage = () => {
     department: selectedDepartment,
     position: selectedPosition,
   });
-  const { data: positions } = trpc.business.getPositions.useQuery({
-    department: selectedDepartment,
+
+  const filteredEmployees = employees?.filter((employee) => {
+    return (
+      employee.name.toLowerCase().includes(search.toLowerCase()) &&
+      employee.id !== user?.user?.id
+    );
   });
-  const filteredEmployees = employees?.filter((employee) =>
-    employee.name.toLowerCase().includes(search.toLowerCase())
-  );
 
   useEffect(() => {
     if (selectedDepartment) {
       refetch();
     }
   }, [refetch, selectedDepartment, selectedPosition]);
+
+  if (isLoading || !filteredEmployees) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -54,11 +61,11 @@ const Dashboard: NextPage = () => {
               onChange={(e) => setSearch(e.target.value)}
               type="text"
               placeholder="Search name"
-              className="input-primary input"
+              className="input-bordered input"
             />
-            {positions && (
+            {positions.length !== 0 && (
               <select
-                className="select-primary select"
+                className="select-bordered select"
                 onChange={(e) => setSelectedPosition(e.target.value)}
               >
                 {positions.map((position) => (
@@ -72,9 +79,9 @@ const Dashboard: NextPage = () => {
                 ))}
               </select>
             )}
-            {departments && (
+            {departments.length !== 0 && (
               <select
-                className="select-primary select"
+                className="select-bordered select"
                 onChange={(e) => setSelectedDepartment(e.target.value)}
               >
                 {departments.map((department) => (
@@ -89,22 +96,21 @@ const Dashboard: NextPage = () => {
               </select>
             )}
             <Link href="/dashboard/manager/employees/add">
-              <button className="btn-primary btn gap-2">
+              <button className="btn-secondary btn gap-2">
                 Add New Employee
                 <PlusCircleIcon className="h-5 w-5" />
               </button>
             </Link>
           </div>
         </section>
-        {isLoading || !employees ? (
-          <div>Loading...</div>
+        {filteredEmployees.length === 0 ? (
+          <div>0 employees found.</div>
         ) : (
           <div>
             <div className="mt-6 grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              {filteredEmployees &&
-                filteredEmployees.map((employee) => (
-                  <EmployeeCard key={employee.id} employee={employee} />
-                ))}
+              {filteredEmployees.map((employee) => (
+                <EmployeeCard key={employee.id} employee={employee} />
+              ))}
             </div>
           </div>
         )}

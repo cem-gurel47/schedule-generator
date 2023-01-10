@@ -9,3 +9,5 @@ export { default as EmployeeLoginCard } from "./EmployeeLogin";
 export { default as BusinessSignupFormCard } from "./BusinessSignupForm";
 export { default as ManagerSignupFormCard } from "./ManagerSignupForm";
 export { default as BusinessImageCard } from "./BusinessImage";
+export { default as DepartmentCard } from "./Department";
+export { default as SingleEmployeeCreationFormCard } from "./SingleEmployeeCreationForm";

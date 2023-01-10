@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "User" ALTER COLUMN "departmentId" DROP DEFAULT,
+ALTER COLUMN "positionId" DROP DEFAULT;

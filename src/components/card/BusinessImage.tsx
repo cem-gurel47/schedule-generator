@@ -19,7 +19,7 @@ const s3 = new AWS.S3({
 });
 
 const BusinessImage = () => {
-  const { image } = useContext(BusinessContext);
+  const { image, setImage } = useContext(BusinessContext);
   const [error, setError] = useState<string | undefined>(undefined);
   const [file, setFile] = useState<File | null>(null);
   const [base64Image, setBase64Image] = useState<string | null>(null);
@@ -54,9 +54,18 @@ const BusinessImage = () => {
       if (err) {
         setError(err.message);
       } else {
-        mutate({
-          imageLink: `https://s3.amazonaws.com/scheduler.v0/${file.name}`,
-        });
+        mutate(
+          {
+            imageLink: `https://s3.amazonaws.com/scheduler.v0/${file.name}`,
+          },
+          {
+            onSuccess: () => {
+              setImage(`https://s3.amazonaws.com/scheduler.v0/${file.name}`);
+              setBase64Image(null);
+              setFile(null);
+            },
+          }
+        );
       }
     });
   };
@@ -74,7 +83,7 @@ const BusinessImage = () => {
   const imageSrc = getImage();
 
   return (
-    <div className="card card-compact relative flex h-full items-center justify-center bg-base-100 shadow-2xl">
+    <div className="card-compact card relative flex h-full items-center justify-center bg-base-100 shadow-2xl">
       <div className="card-body w-full">
         {!data && base64Image && (
           <div className="absolute top-0 right-0">

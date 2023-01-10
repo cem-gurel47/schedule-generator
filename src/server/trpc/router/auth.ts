@@ -12,23 +12,23 @@ export const authRouter = router({
   createBusinessAndManagerAccount: publicProcedure
     .input(
       z.object({
+        name: z.string(),
         email: z.string().email(),
         password: z.string().min(8),
         businessName: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { email, password } = input;
+      const { email, password, businessName, name } = input;
       const business = await ctx.prisma.business.create({
         data: {
-          name: input.businessName,
+          name: businessName,
         },
       });
 
-      console.log("business created", business);
-
       const user = await ctx.prisma.user.create({
         data: {
+          name: name,
           email,
           password: await bcrypt.hash(password, 10),
           role: "manager",

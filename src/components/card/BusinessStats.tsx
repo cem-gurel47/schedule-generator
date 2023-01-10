@@ -1,11 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-// import { useContext } from "react";
-// import { BusinessContext } from "@contexts/BusinessContext";
+import { useContext } from "react";
+import { BusinessContext } from "@contexts/BusinessContext";
 
 const BusinessStats = () => {
-  // const { name, logoURL, isClosed } = useContext(BusinessContext);
+  const { departments } = useContext(BusinessContext);
   return (
-    <div className="stats stats-vertical mt-6 shadow">
+    <div className="stats mt-6 w-full shadow">
       <div className="stat">
         <div className="stat-figure text-primary">
           <svg
@@ -24,7 +24,7 @@ const BusinessStats = () => {
         </div>
         <div className="stat-title">Total Employees</div>
         <div className="stat-value text-primary">25.6K</div>
-        <div className="stat-desc">21% more than last month</div>
+        {/* <div className="stat-desc">21% more than last month</div> */}
       </div>
 
       <div className="stat">
@@ -44,8 +44,8 @@ const BusinessStats = () => {
           </svg>
         </div>
         <div className="stat-title">Total Departments</div>
-        <div className="stat-value text-secondary">2.6M</div>
-        <div className="stat-desc">21% more than last month</div>
+        <div className="stat-value text-secondary">{departments.length}</div>
+        {/* <div className="stat-desc">21% more than last month</div> */}
       </div>
 
       <div className="stat">
