@@ -20,8 +20,9 @@ const DashboardManagerHeader = () => {
   };
 
   const handleSignOut = async () => {
-    await signOut();
-    router.push("/auth/login");
+    await signOut({
+      callbackUrl: "/",
+    });
   };
 
   return (

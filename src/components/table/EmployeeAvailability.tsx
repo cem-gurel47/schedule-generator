@@ -11,8 +11,8 @@ const EmployeeAvailability = ({ hours }: Props) => {
       <thead>
         <tr>
           <th>Day</th>
-          <th>Starts at</th>
-          <th>Ends at</th>
+          <th>Ready to start</th>
+          <th>Ready to work until</th>
         </tr>
       </thead>
       <tbody>

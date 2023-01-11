@@ -63,8 +63,8 @@ model User {
   priority      Int      @default(1)
   minHours      Int      @default(0)
   maxHours      Int      @default(0)
-  startingHours Int[]   @default([])
-  endingHours   Int[]   @default([])
+  startingHours String[]   @default([])
+  endingHours   String[]   @default([])
 }
 
 model Business {

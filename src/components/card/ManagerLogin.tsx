@@ -6,19 +6,22 @@ import { ErrorAlert } from "@components/alert/index";
 
 const Login = () => {
   const [error, setError] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email");
     const password = formData.get("password");
     const result = await signIn("credentials", {
       email,
       password,
-      redirect: false,
+      callbackUrl: "/dashboard/manager",
     });
     if (!result) {
       setError("Something went wrong");
+      setLoading(false);
       return;
     }
     if (result.error) {
@@ -28,6 +31,7 @@ const Login = () => {
       console.log(result);
       // router.push("/dashboard/manager");
     }
+    setLoading(false);
   };
 
   return (
@@ -65,14 +69,11 @@ const Login = () => {
               setError={setError}
             />
           )}
-          <div className="form-control my-1">
-            <label className="label cursor-pointer justify-start gap-4">
-              <input type="checkbox" className="checkbox" />
-              <span className="label-text-alt">Remember me</span>
-            </label>
-          </div>
-          <div className="form-control">
-            <button className="btn-primary btn">Login</button>
+
+          <div className="form-control mt-4">
+            <button className={`btn-primary btn ${loading && "loading"}`}>
+              Login
+            </button>
           </div>
           <div className="form-control">
             <Link

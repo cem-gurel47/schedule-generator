@@ -3,6 +3,8 @@ import React, { useContext } from "react";
 import { BusinessContext } from "@contexts/index";
 import type { Employee } from "@models/types";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { trpc } from "@utils/trpc";
+import { SuccessAlert } from "@components/alert/index";
 
 enum ActionType {
   SET_PRIORITY = "SET_PRIORITY",
@@ -29,10 +31,20 @@ type Props = {
 
 const EmployeeProfile = ({ employee, state, dispatch }: Props) => {
   const { departments } = useContext(BusinessContext);
+  const { mutate, isLoading, data } =
+    trpc.employees.updateEmployeePriorityAndDepartment.useMutation();
   const disabled =
     state.department === employee.department &&
     state.position === employee.position &&
     state.priority === employee.priority;
+
+  const updatePriority = () => {
+    mutate({
+      id: employee.id,
+      priority: state.priority,
+      department: state.department,
+    });
+  };
 
   return (
     <div className="card bg-base-100 shadow-xl">
@@ -98,8 +110,8 @@ const EmployeeProfile = ({ employee, state, dispatch }: Props) => {
           <div className="mt-2">
             <input
               type="range"
-              min="0"
-              max="5"
+              min={1}
+              max={5}
               value={state.priority}
               onChange={(e) => {
                 dispatch({
@@ -108,7 +120,7 @@ const EmployeeProfile = ({ employee, state, dispatch }: Props) => {
                 });
               }}
               className="range"
-              step="1"
+              step={1}
             />
             <div className="flex w-full justify-between px-2 text-xs">
               <span>1</span>
@@ -120,13 +132,23 @@ const EmployeeProfile = ({ employee, state, dispatch }: Props) => {
           </div>
         </div>
         <div className="">
-          <div className="stat-title">Preferred Working Amount</div>
-          <div className="stat-value">15-20 hours</div>
+          <div className="stat-title">Preferred Working Amount:</div>
+          <div className="stat-value">{`${employee.minHours} - ${employee.maxHours} hours`}</div>
         </div>
         <div className="card-actions mt-4 justify-end">
-          <button className="btn-primary btn" disabled={disabled}>
+          <button
+            onClick={updatePriority}
+            className={`btn-primary btn ${isLoading && "loading"}`}
+            disabled={disabled}
+          >
             SAVE CHANGES
           </button>
+          {data && (
+            <SuccessAlert
+              title="Success!"
+              description="Changes have been saved."
+            />
+          )}
         </div>
       </div>
     </div>

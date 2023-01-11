@@ -5,6 +5,10 @@ export type Employee = {
   department: string;
   email: string;
   priority: number;
+  minHours: number;
+  maxHours: number;
+  startingHours: string[];
+  endingHours: string[];
 };
 
 export type Shift = {

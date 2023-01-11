@@ -5,21 +5,21 @@ export const employeeRouter = router({
   getEmployees: protectedProcedure
     .input(
       z.object({
-        department: z.string().nullish(),
-        position: z.string().nullish(),
+        // department: z.string().nullish(),
+        // position: z.string().nullish(),
       })
     )
-    .query(async ({ input, ctx }) => {
-      const { department, position } = input;
+    .query(async ({ ctx }) => {
+      // const { department, position } = input;
 
       return await ctx.prisma.user.findMany({
         where: {
-          department: {
-            equals: department || undefined,
-          },
-          position: {
-            equals: position || undefined,
-          },
+          // department: {
+          //   contains: department,
+          // },
+          // position: {
+          //   contains: position,
+          // },
         },
       });
     }),
@@ -56,6 +56,37 @@ export const employeeRouter = router({
 
       return employee;
     }),
+  updateEmployeePriorityAndDepartment: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        priority: z.number().nullish(),
+        department: z.string().nullish(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, priority, department } = input;
+
+      const data = {};
+
+      if (priority) {
+        Object.assign(data, { priority });
+      }
+
+      if (department) {
+        Object.assign(data, { department });
+      }
+
+      const employee = await ctx.prisma.user.update({
+        where: {
+          id,
+        },
+        data: data,
+      });
+
+      return employee;
+    }),
+
   getEmployee: protectedProcedure
     .input(
       z.object({
