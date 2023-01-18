@@ -1,4 +1,4 @@
-import { Shift } from "@models/types";
+import type { Shift } from "@models/types";
 
 type Props = {
   shift: Shift;
@@ -29,7 +29,7 @@ const CalendarCell = (props: Props) => {
 
   return (
     <div
-      className={`w-full h-full flex flex-col justify-center items-center shadow-lg rounded-2xl p-2 text-center cursor-grab ${createLinearBackgroundClassName()}`}
+      className={`flex h-full w-full cursor-grab flex-col items-center justify-center rounded-2xl p-2 text-center text-gray-300 shadow-lg ${createLinearBackgroundClassName()}`}
       style={{
         gridRowStart: start,
         gridRowEnd: end,

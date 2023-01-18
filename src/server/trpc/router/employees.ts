@@ -86,6 +86,52 @@ export const employeeRouter = router({
 
       return employee;
     }),
+  updateEmployeeWorkingHours: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        startingHours: z.array(z.string()),
+        endingHours: z.array(z.string()),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, startingHours, endingHours } = input;
+
+      const employee = await ctx.prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          startingHours,
+          endingHours,
+        },
+      });
+
+      return employee;
+    }),
+  updateEmployeeHourRange: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        minHours: z.number(),
+        maxHours: z.number(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, minHours, maxHours } = input;
+
+      const employee = await ctx.prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          minHours,
+          maxHours,
+        },
+      });
+
+      return employee;
+    }),
 
   getEmployee: protectedProcedure
     .input(

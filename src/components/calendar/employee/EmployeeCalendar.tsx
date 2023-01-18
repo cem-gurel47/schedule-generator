@@ -9,7 +9,7 @@ type Props = {
 const Calendar = (props: Props) => {
   return (
     <div className=" pb-24">
-      <div className="mt-12 w-full rounded-xl border border-secondary">
+      <div className="mt-12 w-full bg-base-100 shadow-2xl">
         <CalendarHeader {...props} />
         <CalendarBody />
       </div>

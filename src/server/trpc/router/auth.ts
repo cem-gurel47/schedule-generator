@@ -36,16 +36,12 @@ export const authRouter = router({
         },
       });
 
-      console.log("user created", user);
-
-      const businessUser = await ctx.prisma.businessUsers.create({
+      await ctx.prisma.businessUsers.create({
         data: {
           businessId: business.id,
           userId: user.id,
         },
       });
-
-      console.log("businessUsers created", businessUser);
 
       return user;
     }),

@@ -6,8 +6,8 @@ import { trpc } from "../utils/trpc";
 import {
   BusinessContextProvider,
   CalendarContextProvider,
+  EmployeeContextProvider,
 } from "@contexts/index";
-
 import "../styles/globals.css";
 
 const MyApp: AppType<{ session: Session | null }> = ({
@@ -18,13 +18,15 @@ const MyApp: AppType<{ session: Session | null }> = ({
     <SessionProvider session={session}>
       <BusinessContextProvider>
         <CalendarContextProvider>
-          <Layout>
-            <Header />
-            <Content>
-              <Component {...pageProps} />
-            </Content>
-            <Footer />
-          </Layout>
+          <EmployeeContextProvider>
+            <Layout>
+              <Header />
+              <Content>
+                <Component {...pageProps} />
+              </Content>
+              <Footer />
+            </Layout>
+          </EmployeeContextProvider>
         </CalendarContextProvider>
       </BusinessContextProvider>
     </SessionProvider>

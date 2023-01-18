@@ -2,7 +2,7 @@ const Footer = () => {
   return (
     <div className="flex w-full justify-center">
       <div className="flex w-full max-w-6xl justify-center py-6">
-        <footer className="footer bg-base-200 p-10 text-base-content">
+        <footer className="footer p-10 text-base-content">
           <div>
             <svg
               width="50"

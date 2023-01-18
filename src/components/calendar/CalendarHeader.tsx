@@ -13,8 +13,8 @@ const CalendarHeader = () => {
   }, []);
 
   return (
-    <div className="flex items-center justify-center w-full border-b-2">
-      <div className="text-center bg-secondary text-white py-4 w-full rounded-tl-lg rounded-tr-lg">
+    <div className="flex w-full items-center justify-center border-b-2 border-secondary">
+      <div className="w-full bg-secondary py-4 text-center">
         Schedule for {date?.format("dddd DD")}
       </div>
     </div>

@@ -14,7 +14,6 @@ const BusinessHours = () => {
     trpc.business.updateBusinessHours.useMutation();
 
   const saveNewHours = () => {
-    console.log(localOpeningHours, localClosingHours);
     const newOpeningHours = new Array(7).fill(undefined).map((_, index) => {
       if (localOpeningHours[index]) {
         return localOpeningHours[index] as string;
@@ -27,8 +26,6 @@ const BusinessHours = () => {
       }
       return "";
     });
-
-    console.log(newOpeningHours, newClosingHours);
 
     mutate({
       openingHours: newOpeningHours,

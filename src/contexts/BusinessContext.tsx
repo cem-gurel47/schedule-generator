@@ -37,7 +37,7 @@ export const BusinessContextProvider = ({
       enabled: false,
     }
   );
-  const dayOfWeek = date ? date.day() : 0;
+  const [dayOfWeek, setDayOfWeek] = useState(0);
   const [isMissingInformation, setIsMissingInformation] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [departments, setDepartments] = useState<string[]>([]);
@@ -54,6 +54,12 @@ export const BusinessContextProvider = ({
       setDepartments(data.departments);
     }
   }, [data]);
+
+  useEffect(() => {
+    if (date) {
+      setDayOfWeek(date.day());
+    }
+  }, [date]);
 
   useEffect(() => {
     if (data) {
@@ -77,7 +83,7 @@ export const BusinessContextProvider = ({
               ...data,
               image,
               departments,
-              isClosed: data.openingHours[dayOfWeek] === null,
+              isClosed: data.openingHours[dayOfWeek] === "",
               isLoading,
               openingHour: data.openingHours[dayOfWeek] || "",
               closingHour: data.closingHours[dayOfWeek] || "",

@@ -35,6 +35,14 @@ module.exports = {
       "night",
       "coffee",
       "winter",
+      {
+        forest: {
+          primary: "#4c1d95",
+          secondary: "#1e3a8a",
+          "base-100": "#171717",
+          "base-200": "#1f1f1f",
+        },
+      },
     ],
   },
   plugins: [require("daisyui")],

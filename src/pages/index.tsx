@@ -4,9 +4,9 @@ import Head from "next/head";
 const Home: NextPage = () => {
   const backgroundShapePositions = [
     "bottom-[15%] right-[35%]",
-    "top-[18%] right-[25%]",
+    "top-[8%] right-[25%]",
     "bottom-[10%] left-[35%]",
-    "top-[20%] left-[25%]",
+    "top-[10%] left-[25%]",
     "top-[46%] right-[15%]",
     "bottom-[30%] left-[23%]",
   ];
@@ -58,7 +58,7 @@ const Home: NextPage = () => {
 };
 
 function BackgroundShape({ position }: { position: string }) {
-  const defaultShape = `rounded-md bg-gray-200 w-[10vw] h-[10vh] absolute z-[-1]`;
+  const defaultShape = `rounded-md bg-primary w-[10vw] h-[10vh] absolute z-[-1]`;
   return <div className={`${defaultShape} ${position}`} />;
 }
 

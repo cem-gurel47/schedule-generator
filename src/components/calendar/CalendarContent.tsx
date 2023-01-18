@@ -4,10 +4,10 @@ import CalendarCell from "./CalendarCell";
 import { BusinessClosedCard } from "@/components/card";
 
 const CalendarContent = () => {
-  const { data, isLoading } = useContext(CalendarContext);
-  const { isClosed } = useContext(BusinessContext);
+  const { data, isLoading, date } = useContext(CalendarContext);
+  const { openingHours } = useContext(BusinessContext);
 
-  if (isClosed) {
+  if (date && openingHours[date.day()] === "") {
     return <BusinessClosedCard />;
   }
 

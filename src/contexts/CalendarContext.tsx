@@ -51,7 +51,7 @@ export const CalendarContextProvider = ({
     if (status === "authenticated") {
       const { data } = await refetch();
       if (data) {
-        setData(data.schedule);
+        setData(data);
       }
     }
   }, [refetch, status]);

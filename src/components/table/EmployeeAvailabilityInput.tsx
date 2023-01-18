@@ -16,32 +16,31 @@ const EmployeeAvailabilityInput = (props: Props) => {
   const isChanged =
     startingHours !== localStartingHours || endingHours !== localEndingHours;
   const { mutate, isLoading, data } =
-    trpc.business.updateBusinessHours.useMutation({});
+    trpc.employees.updateEmployeeWorkingHours.useMutation({});
 
   const saveNewHours = () => {
-    const newOpeningHours = new Array(7).fill(undefined).map((_, index) => {
+    const newStartingHours = new Array(7).fill(undefined).map((_, index) => {
       if (localStartingHours[index]) {
         return localStartingHours[index] as string;
       }
       return "";
     });
-    const newClosingHours = new Array(7).fill(undefined).map((_, index) => {
+    const newEndingHours = new Array(7).fill(undefined).map((_, index) => {
       if (localEndingHours[index]) {
         return localEndingHours[index] as string;
       }
       return "";
     });
 
-    console.log(newOpeningHours, newClosingHours);
-
     mutate({
-      openingHours: newOpeningHours,
-      closingHours: newClosingHours,
+      id: employee.id,
+      startingHours: newStartingHours,
+      endingHours: newEndingHours,
     });
   };
 
   return (
-    <div className="col-span-2 overflow-x-auto">
+    <div className="col-span-2 overflow-x-auto shadow-xl">
       <table className="table-zebra table w-full">
         <thead>
           <tr>
@@ -119,7 +118,7 @@ const EmployeeAvailabilityInput = (props: Props) => {
       {data && (
         <SuccessAlert
           title="Success!"
-          description="Business hours updated successfully"
+          description="Your hours have been updated successfully"
         />
       )}
     </div>

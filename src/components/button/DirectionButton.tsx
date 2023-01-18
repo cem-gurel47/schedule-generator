@@ -8,7 +8,10 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 const DirectionButton = (props: Props) => {
   const { direction, ...rest } = props;
   return (
-    <button className="btn-secondary btn-circle btn" {...rest}>
+    <button
+      className="btn bg-gradient-to-b from-violet-900 to-blue-900 duration-200 ease-in-out hover:opacity-80"
+      {...rest}
+    >
       {direction === "left" ? (
         <ArrowLeftIcon className="text-contrast h-5 w-5" />
       ) : (

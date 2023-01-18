@@ -30,9 +30,10 @@ const CalendarOptions = () => {
         <div className="tooltip" data-tip="Next week">
           <DirectionalButton direction="right" onClick={handleNext} />
         </div>
-        <p className=" text-xl font-medium text-secondary">{`${date?.format(
-          "MMMM"
-        )} ${date?.clone().startOf("week").format("DD")}-${date
+        <p className=" text-xl text-gray-400">{`${date?.format("MMMM")} ${date
+          ?.clone()
+          .startOf("week")
+          .format("DD")} - ${date?.clone().endOf("week").format("MMMM")} ${date
           ?.clone()
           .endOf("week")
           .format("DD")}`}</p>

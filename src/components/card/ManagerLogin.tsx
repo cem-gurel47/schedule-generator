@@ -17,8 +17,9 @@ const Login = () => {
     const result = await signIn("credentials", {
       email,
       password,
-      callbackUrl: "/dashboard/manager",
-    });
+      // callbackUrl: "/dashboard/manager",
+      redirect: false,
+    }); // if auth status changes to authenticated, it will redirect to the dashboard
     if (!result) {
       setError("Something went wrong");
       setLoading(false);
@@ -26,10 +27,6 @@ const Login = () => {
     }
     if (result.error) {
       setError(result.error);
-    }
-    if (result.ok) {
-      console.log(result);
-      // router.push("/dashboard/manager");
     }
     setLoading(false);
   };

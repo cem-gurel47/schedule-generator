@@ -1,10 +1,12 @@
 import { useContext } from "react";
-import { BusinessContext } from "@contexts/BusinessContext";
+import { BusinessContext, CalendarContext } from "@contexts/index";
 
 const CalendarSider = () => {
-  const { openingHour, closingHour, isClosed } = useContext(BusinessContext);
+  const { openingHours, closingHour, openingHour } =
+    useContext(BusinessContext);
+  const { date } = useContext(CalendarContext);
 
-  if (isClosed || !openingHour || !closingHour) {
+  if (date && openingHours[date.day()] === "") {
     return null;
   }
 
@@ -32,17 +34,15 @@ const CalendarSider = () => {
   const businessHours = getBusinessHours();
 
   return (
-    <div className=" border-r-2">
+    <div className="">
       {businessHours.map((hour, index) => (
         <div key={hour}>
           <div
-            className={`flex justify-center items-center h-14 p-4 bg-secondary ${
-              index === businessHours.length - 1
-                ? "rounded-bl-lg"
-                : "border-b-2"
+            className={`flex h-14 items-center justify-center p-4 shadow-xl ${
+              index !== businessHours.length - 1 && ""
             }`}
           >
-            <span className="text-sm font-medium text-white">{hour}:00</span>
+            <span className="text-sm font-medium text-gray-400">{hour}</span>
           </div>
         </div>
       ))}

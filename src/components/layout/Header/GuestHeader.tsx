@@ -15,7 +15,7 @@ const ITEMS = [
     href: "/auth/signup",
     label: "Sign Up",
     className:
-      "rounded-md bg-secondary py-3 px-6 text-white transition duration-300 hover:bg-primary",
+      "rounded-md bg-secondary py-3 px-6 text-white transition duration-300 hover:opacity-80 hover:text-white",
   },
 ];
 
@@ -32,7 +32,9 @@ const GuestHeader = () => {
               >
                 <div className="flex items-center space-x-2">
                   <CalendarDaysIcon className="h-12 w-12" />
-                  <p>Scheduler</p>
+                  <p className="bg-gradient-to-b from-violet-900 to-blue-900 bg-clip-text text-4xl text-transparent">
+                    Scheduler
+                  </p>
                 </div>
               </Link>
             </li>
@@ -66,7 +68,12 @@ const ListItem = ({
   };
   return (
     <li>
-      <Link href={href} className={`${isActive(href)} ${className}`}>
+      <Link
+        href={href}
+        className={`${isActive(
+          href
+        )} transition duration-200 ease-in-out hover:text-primary ${className}`}
+      >
         {label}
       </Link>
     </li>

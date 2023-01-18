@@ -43,42 +43,9 @@ const DashboardManagerHeader = () => {
           <li className={isActive("")}>
             <Link href={`${BASE_URL}/`}>Work Schedule</Link>
           </li>
-          {/* <li className="dropdown-hover dropdown">
-            <div className="indicator">
-              {data && data > 0 && (
-                <span className=" badge-secondary badge indicator-item">
-                  +{data}
-                </span>
-              )}
-
-              <a className="flex">
-                Shift Changes{" "}
-                <svg
-                  className="fill-current"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                </svg>
-              </a>
-            </div>
-            <ul
-              tabIndex={0}
-              className="dropdown-content menu rounded-box w-52 bg-base-100 p-2 shadow"
-            >
-              <li>
-                <Link href={`${BASE_URL}/shift-changes`}>Shift Changes</Link>
-              </li>
-              <li>
-                <Link href={`${BASE_URL}/shift-swaps`}>Shift Swaps</Link>
-              </li>
-              <li>
-                <Link href={`${BASE_URL}/shift-cancels`}>Shift Cancels</Link>
-              </li>
-            </ul>
-          </li> */}
+          <li className={isActive("/constraints")}>
+            <Link href={`${BASE_URL}/constraints`}>Constraints</Link>
+          </li>
           <li className={isActive("/employees")}>
             <Link href={`${BASE_URL}/employees`}>Employees</Link>
           </li>

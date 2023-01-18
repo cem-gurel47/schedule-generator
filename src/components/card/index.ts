@@ -11,3 +11,4 @@ export { default as ManagerSignupFormCard } from "./ManagerSignupForm";
 export { default as BusinessImageCard } from "./BusinessImage";
 export { default as DepartmentCard } from "./Department";
 export { default as SingleEmployeeCreationFormCard } from "./SingleEmployeeCreationForm";
+export { default as EmployeeHoursCard } from "./EmployeeHours";

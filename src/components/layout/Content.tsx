@@ -55,6 +55,16 @@ function Content({ children }: Props) {
     }
   }, [closingHours.length, data, image, openingHours]);
 
+  // useEffect(() => {
+  //   if (
+  //     (data?.user?.role === "employee" &&
+  //       data.user.startingHours.length === 0) ||
+  //     data?.user?.endingHours.length === 0
+  //   ) {
+  //     setShowCompleteAccountAlert(true);
+  //   }
+  // }, [data]);
+
   if (isLoading) {
     return <Loading />;
   }

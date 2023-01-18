@@ -14,7 +14,6 @@ const Add = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
   };
 
   const addNewDepartment = (departmentName: string) => {
-    console.log(departmentName);
     mutate(
       {
         name: departmentName,

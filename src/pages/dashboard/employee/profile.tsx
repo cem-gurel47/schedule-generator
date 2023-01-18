@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { trpc } from "@utils/trpc";
 import { useSession } from "next-auth/react";
 import { EmployeeAvailabilityInputTable } from "@components/table/index";
+import { EmployeeHoursCard } from "@components/card";
 
 const EmployeeProfile: NextPage = () => {
   const { data: session, status } = useSession();
@@ -17,7 +18,6 @@ const EmployeeProfile: NextPage = () => {
   );
 
   useEffect(() => {
-    console.log(status, session);
     if (status === "authenticated" && session) {
       refetch();
     }
@@ -36,7 +36,14 @@ const EmployeeProfile: NextPage = () => {
       </Head>
       <main className="">
         <section className="mt-12 h-full">
-          <EmployeeAvailabilityInputTable employee={employee} />
+          <div className="grid grid-cols-4 gap-4">
+            <div className="col-span-1 grid">
+              <EmployeeHoursCard employee={employee} />
+            </div>
+            <div className="col-span-2">
+              <EmployeeAvailabilityInputTable employee={employee} />
+            </div>
+          </div>
         </section>
       </main>
     </>
