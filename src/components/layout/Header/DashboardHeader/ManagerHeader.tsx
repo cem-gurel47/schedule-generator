@@ -67,7 +67,7 @@ const DashboardManagerHeader = () => {
               }
               alt="profile"
               layout="fill"
-              className="rounded-full"
+              className="mask mask-squircle"
             />
           </div>
         </label>

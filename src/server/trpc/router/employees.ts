@@ -86,29 +86,6 @@ export const employeeRouter = router({
 
       return employee;
     }),
-  updateEmployeeWorkingHours: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        startingHours: z.array(z.string()),
-        endingHours: z.array(z.string()),
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const { id, startingHours, endingHours } = input;
-
-      const employee = await ctx.prisma.user.update({
-        where: {
-          id,
-        },
-        data: {
-          startingHours,
-          endingHours,
-        },
-      });
-
-      return employee;
-    }),
   updateEmployeeHourRange: protectedProcedure
     .input(
       z.object({
@@ -148,5 +125,86 @@ export const employeeRouter = router({
       });
 
       return employee;
+    }),
+
+  addAvailability: protectedProcedure
+    .input(
+      z.object({
+        dayOfWeek: z.number(),
+        start: z.string(),
+        end: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { dayOfWeek, start, end } = input;
+
+      const availability = await ctx.prisma.availability.create({
+        data: {
+          userId: ctx.session.user.id,
+          dayOfWeek,
+          start,
+          end,
+        },
+      });
+
+      return availability;
+    }),
+  getAvailabilities: protectedProcedure
+    .input(
+      z.object({
+        userId: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { userId } = input;
+
+      const availabilities = await ctx.prisma.availability.findMany({
+        where: {
+          userId,
+        },
+      });
+
+      return availabilities;
+    }),
+
+  updateAvailability: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        dayOfWeek: z.number(),
+        start: z.string(),
+        end: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { id, dayOfWeek, start, end } = input;
+
+      const availability = await ctx.prisma.availability.update({
+        where: {
+          id,
+        },
+        data: {
+          dayOfWeek,
+          start,
+          end,
+        },
+      });
+
+      return availability;
+    }),
+  deleteAvailability: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const availability = await ctx.prisma.availability.delete({
+        where: {
+          id: input.id,
+        },
+      });
+
+      return availability;
     }),
 });

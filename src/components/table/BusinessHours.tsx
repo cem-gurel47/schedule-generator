@@ -34,7 +34,7 @@ const BusinessHours = () => {
   };
 
   return (
-    <div className="col-span-2 overflow-x-auto">
+    <div className="col-span-3 overflow-x-auto">
       <table className="table-zebra table w-full">
         <thead>
           <tr>

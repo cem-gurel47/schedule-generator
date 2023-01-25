@@ -13,9 +13,9 @@ const CalendarHeader = () => {
   }, []);
 
   return (
-    <div className="flex w-full items-center justify-center border-b-2 border-secondary">
-      <div className="w-full bg-secondary py-4 text-center">
-        Schedule for {date?.format("dddd DD")}
+    <div className="flex w-full items-center justify-center">
+      <div className="w-full py-4 text-center text-xl text-secondary">
+        <p>Schedule for {date?.format("dddd DD")}</p>
       </div>
     </div>
   );

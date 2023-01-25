@@ -83,7 +83,7 @@ const BusinessImage = () => {
   const imageSrc = getImage();
 
   return (
-    <div className="card-compact card relative flex h-full items-center justify-center bg-base-100 shadow-2xl">
+    <div className="card card-compact relative flex h-full items-center justify-center bg-base-100 shadow-2xl">
       <div className="card-body w-full">
         {!data && base64Image && (
           <div className="absolute top-0 right-0">
@@ -100,7 +100,7 @@ const BusinessImage = () => {
           <img
             src={imageSrc}
             alt="business_logo"
-            className="mb-2 w-full object-contain object-top"
+            className="mask mask-squircle mb-2 w-full object-contain object-top"
           />
         </figure>
       </div>

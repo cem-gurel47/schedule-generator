@@ -17,7 +17,7 @@ const EmployeeHours = ({ employee }: Props) => {
     isLoading || (localMinHours === minHours && localMaxHours === maxHours);
 
   return (
-    <div className="card h-full bg-base-100 shadow-xl">
+    <div className="card h-full bg-base-200 shadow-xl">
       <div className="card-body">
         <form
           onSubmit={(e) => {

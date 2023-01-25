@@ -7,12 +7,30 @@ export type Employee = {
   priority: number;
   minHours: number;
   maxHours: number;
-  startingHours: string[];
-  endingHours: string[];
+};
+
+export type Availability = {
+  id: string;
+  userId: string;
+  dayOfWeek: number;
+  start: string;
+  end: string;
 };
 
 export type Shift = {
   employee: Partial<Employee>;
   shiftStart: string;
   shiftEnd: string;
+};
+
+export type Constraint = {
+  id: string;
+  businessId: string;
+  type: "MIN" | "MAX" | "EXACT";
+  dayOfWeek: number;
+  start: string;
+  end: string;
+  position: string;
+  department: string;
+  constraint: number;
 };

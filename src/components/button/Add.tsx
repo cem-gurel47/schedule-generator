@@ -4,27 +4,49 @@ import { BusinessContext } from "@contexts/index";
 import { PlusCircleIcon } from "@heroicons/react/24/solid";
 import { trpc } from "@utils/trpc";
 
-const Add = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
-  const { setDepartments } = useContext(BusinessContext);
-  const { mutate, isLoading } = trpc.business.addNewDepartment.useMutation();
+interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant: "department" | "position";
+}
+
+const Add = (props: Props) => {
+  const { setDepartments, setPositions } = useContext(BusinessContext);
+  const { mutate: mutateDepartment, isLoading: isDepartmentLoading } =
+    trpc.business.addNewDepartment.useMutation();
+  const { mutate: mutatePosition, isLoading: isPositionLoading } =
+    trpc.business.addNewPosition.useMutation();
+
   const [inputMode, setInputMode] = useState(false);
 
-  const handleAddNewDepartment = () => {
+  const handleAddNew = () => {
     setInputMode(true);
   };
 
-  const addNewDepartment = (departmentName: string) => {
-    mutate(
-      {
-        name: departmentName,
-      },
-      {
-        onSuccess: (data) => {
-          setDepartments(data.departments);
-          setInputMode(false);
+  const addNew = (name: string) => {
+    if (props.variant === "department") {
+      mutateDepartment(
+        {
+          name,
         },
-      }
-    );
+        {
+          onSuccess: (data) => {
+            setDepartments(data.departments);
+            setInputMode(false);
+          },
+        }
+      );
+    } else {
+      mutatePosition(
+        {
+          name,
+        },
+        {
+          onSuccess: (data) => {
+            setPositions(data.positions);
+            setInputMode(false);
+          },
+        }
+      );
+    }
   };
 
   if (inputMode) {
@@ -34,16 +56,16 @@ const Add = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
           onSubmit={(e) => {
             e.preventDefault();
             const formData = new FormData(e.target as HTMLFormElement);
-            const departmentName = formData.get("departmentName");
-            if (!departmentName) {
+            const name = formData.get("name");
+            if (!name) {
               return;
             }
-            addNewDepartment(departmentName as string);
+            addNew(name as string);
           }}
         >
           <input
             autoFocus
-            name="departmentName"
+            name="name"
             required
             type="text"
             className="input w-full"
@@ -52,7 +74,7 @@ const Add = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
           <div className="mt-2 grid grid-cols-2 gap-1">
             <button
               className={`btn-outline btn-primary btn col-span-1${
-                isLoading && "loading"
+                (isDepartmentLoading || isPositionLoading) && "loading"
               }`}
               type="submit"
             >
@@ -74,7 +96,7 @@ const Add = (props: ButtonHTMLAttributes<HTMLButtonElement>) => {
     <button
       {...props}
       className="btn-ghost btn-block btn h-auto rounded-md bg-base-200 py-6"
-      onClick={handleAddNewDepartment}
+      onClick={handleAddNew}
     >
       <PlusCircleIcon className="h-12 w-12" />
     </button>

@@ -7,6 +7,7 @@ import {
   BusinessContextProvider,
   CalendarContextProvider,
   EmployeeContextProvider,
+  ConstraintContextProvider,
 } from "@contexts/index";
 import "../styles/globals.css";
 
@@ -19,13 +20,15 @@ const MyApp: AppType<{ session: Session | null }> = ({
       <BusinessContextProvider>
         <CalendarContextProvider>
           <EmployeeContextProvider>
-            <Layout>
-              <Header />
-              <Content>
-                <Component {...pageProps} />
-              </Content>
-              <Footer />
-            </Layout>
+            <ConstraintContextProvider>
+              <Layout>
+                <Header />
+                <Content>
+                  <Component {...pageProps} />
+                </Content>
+                <Footer />
+              </Layout>
+            </ConstraintContextProvider>
           </EmployeeContextProvider>
         </CalendarContextProvider>
       </BusinessContextProvider>

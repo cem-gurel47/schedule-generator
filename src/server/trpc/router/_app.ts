@@ -5,6 +5,7 @@ import { shiftsRouter } from "./shifts";
 import { businessRouter } from "./business";
 import { scheduleRouter } from "./schedule";
 import { employeeRouter } from "./employees";
+import { constraintRouter } from "./constraint";
 
 export const appRouter = router({
   example: exampleRouter,
@@ -13,6 +14,7 @@ export const appRouter = router({
   business: businessRouter,
   schedule: scheduleRouter,
   employees: employeeRouter,
+  constraint: constraintRouter,
 });
 
 // export type definition of API

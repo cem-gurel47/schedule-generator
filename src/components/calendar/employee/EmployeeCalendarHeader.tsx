@@ -20,9 +20,11 @@ const CalendarHeader = ({ type, name }: Props) => {
   return (
     <div className="flex w-full items-center justify-center">
       <div className="w-full py-4 text-center text-xl text-secondary">
-        {type === "default"
-          ? `Schedule for ${date?.format("dddd DD")}`
-          : `${name}'s schedule for ${date?.format("dddd DD")}`}
+        <p>
+          {type === "default"
+            ? `Schedule for ${date?.format("dddd DD")}`
+            : `${name}'s schedule for ${date?.format("dddd DD")}`}
+        </p>
       </div>
     </div>
   );

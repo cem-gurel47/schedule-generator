@@ -18,6 +18,7 @@ interface BusinessContextInterface {
   isMissingInformation: boolean;
   positions: string[];
   setDepartments: React.Dispatch<React.SetStateAction<string[]>>;
+  setPositions: React.Dispatch<React.SetStateAction<string[]>>;
   setImage: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
@@ -41,6 +42,7 @@ export const BusinessContextProvider = ({
   const [isMissingInformation, setIsMissingInformation] = useState(false);
   const [image, setImage] = useState<string | null>(null);
   const [departments, setDepartments] = useState<string[]>([]);
+  const [positions, setPositions] = useState<string[]>([]);
 
   useEffect(() => {
     if (session.status === "authenticated") {
@@ -52,6 +54,7 @@ export const BusinessContextProvider = ({
     if (data) {
       setImage(data.image);
       setDepartments(data.departments);
+      setPositions(data.positions);
     }
   }, [data]);
 
@@ -88,7 +91,9 @@ export const BusinessContextProvider = ({
               openingHour: data.openingHours[dayOfWeek] || "",
               closingHour: data.closingHours[dayOfWeek] || "",
               isMissingInformation,
+              positions,
               setDepartments,
+              setPositions,
               setImage,
             }
           : {
@@ -104,6 +109,7 @@ export const BusinessContextProvider = ({
               departments: [],
               isMissingInformation,
               setDepartments,
+              setPositions,
               setImage,
               positions: [],
             }

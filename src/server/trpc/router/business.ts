@@ -27,6 +27,7 @@ export const businessRouter = router({
           image: input.imageLink,
         },
       });
+
       return business;
     }),
   updateBusinessHours: protectedProcedure
@@ -47,6 +48,94 @@ export const businessRouter = router({
       });
 
       return business;
+    }),
+
+  addNewPosition: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const business = await ctx.prisma.business.update({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+        data: {
+          positions: {
+            push: input.name,
+          },
+        },
+      });
+
+      return business;
+    }),
+
+  deletePosition: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const business = await ctx.prisma.business.findUnique({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+      });
+
+      if (!business) {
+        throw new Error("Business not found");
+      }
+
+      const newPositions = business.positions.filter(
+        (position) => position !== input.name
+      );
+
+      const updatedBusiness = await ctx.prisma.business.update({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+        data: {
+          positions: newPositions,
+        },
+      });
+
+      return updatedBusiness;
+    }),
+
+  editPosition: protectedProcedure
+    .input(
+      z.object({
+        oldName: z.string(),
+        newName: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const business = await ctx.prisma.business.findUnique({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+      });
+
+      if (!business) {
+        throw new Error("Business not found");
+      }
+
+      const newPositions = business.positions.map((position) =>
+        position === input.oldName ? input.newName : position
+      );
+
+      const updatedBusiness = await ctx.prisma.business.update({
+        where: {
+          id: ctx.session.user.businessId,
+        },
+        data: {
+          positions: newPositions,
+        },
+      });
+
+      return updatedBusiness;
     }),
 
   addNewDepartment: protectedProcedure

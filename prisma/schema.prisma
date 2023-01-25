@@ -20,6 +20,12 @@ model Example {
   updatedAt DateTime @updatedAt
 }
 
+enum CONSTRAINT {
+  MIN
+  MAX
+  EXACT
+}
+
 // Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
@@ -47,6 +53,15 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
+model Availability {
+  id            String    @id @default(cuid())
+  userId        String
+  dayOfWeek     Int
+  start         String
+  end           String
+}
+
+
 model User {
   id            String    @id @default(cuid())
   role          String    @default("employee")
@@ -63,9 +78,9 @@ model User {
   priority      Int      @default(1)
   minHours      Int      @default(0)
   maxHours      Int      @default(0)
-  startingHours String[]   @default([])
-  endingHours   String[]   @default([])
 }
+
+
 
 model Business {
   id            String          @id @default(cuid())
@@ -76,6 +91,18 @@ model Business {
   businessUsers BusinessUsers[] 
   departments   String[]
   positions     String[]
+}
+
+model Constraint {
+  id            String          @id @default(cuid())
+  businessId    String
+  dayOfWeek     Int          
+  start         String
+  end           String
+  position      String
+  department    String
+  constraint    Int
+  type          CONSTRAINT         
 }
 
 // model Department {

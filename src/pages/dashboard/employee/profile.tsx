@@ -3,7 +3,7 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { trpc } from "@utils/trpc";
 import { useSession } from "next-auth/react";
-import { EmployeeAvailabilityInputTable } from "@components/table/index";
+import EmployeeAvailabilityContainer from "@components/container/Employee/EmployeeProfile/EmployeeAvailability";
 import { EmployeeHoursCard } from "@components/card";
 
 const EmployeeProfile: NextPage = () => {
@@ -16,12 +16,22 @@ const EmployeeProfile: NextPage = () => {
       enabled: false,
     }
   );
+  const { data: availabilities, refetch: refetchAvailabilities } =
+    trpc.employees.getAvailabilities.useQuery(
+      {
+        userId: session?.user?.id as string,
+      },
+      {
+        enabled: false,
+      }
+    );
 
   useEffect(() => {
     if (status === "authenticated" && session) {
       refetch();
+      refetchAvailabilities();
     }
-  }, [refetch, status, session]);
+  }, [refetch, status, session, refetchAvailabilities]);
 
   if (!employee) {
     return <div>Loading...</div>;
@@ -37,11 +47,13 @@ const EmployeeProfile: NextPage = () => {
       <main className="">
         <section className="mt-12 h-full">
           <div className="grid grid-cols-4 gap-4">
+            <div className="col-span-4">
+              <EmployeeAvailabilityContainer
+                availabilities={availabilities || []}
+              />
+            </div>
             <div className="col-span-1 grid">
               <EmployeeHoursCard employee={employee} />
-            </div>
-            <div className="col-span-2">
-              <EmployeeAvailabilityInputTable employee={employee} />
             </div>
           </div>
         </section>
