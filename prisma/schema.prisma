@@ -121,6 +121,15 @@ model Constraint {
 //   users         User[]
 // }
 
+model Shift {
+  id            String          @id @default(cuid())
+  userId        String
+  businessId    String
+  start         String
+  end           String
+  date          String
+}
+
 model BusinessUsers {
   id         String   @id @default(cuid())
   businessId String

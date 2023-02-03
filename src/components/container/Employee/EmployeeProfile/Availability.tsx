@@ -1,5 +1,5 @@
 import { trpc } from "@utils/trpc";
-import { XCircleIcon } from "@heroicons/react/24/outline";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import type { Availability } from "@models/types";
 
 type Props = {
@@ -30,7 +30,7 @@ const AvailabilityCard = (props: Props) => {
           );
         }}
       >
-        <XCircleIcon className="h-5 w-5 transition duration-150 ease-in-out hover:opacity-80" />
+        <TrashIcon className="h-5 w-5 transition duration-150 ease-in-out hover:opacity-80" />
       </button>
 
       <p className="">

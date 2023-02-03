@@ -1,6 +1,11 @@
 import { router, protectedProcedure } from "../trpc";
 import { z } from "zod";
 import moment from "moment";
+import {
+  getEmployeeAvailabilitiesForDayOfWeek,
+  findConstraintsForTheEmployee,
+  getLongestAvailableTimeForEmployee,
+} from "@utils/helpers";
 
 export const scheduleRouter = router({
   createScheduleForWeek: protectedProcedure
@@ -13,7 +18,7 @@ export const scheduleRouter = router({
     .mutation(async ({ ctx, input }) => {
       const { date, department } = input;
       const dateObject = moment(date);
-      const dayOfWeek = dateObject.day();
+
       // this function should create a schedule for the week of the date passed in
 
       const business = await ctx.prisma.business.findUnique({
@@ -21,14 +26,10 @@ export const scheduleRouter = router({
           id: ctx.session.user.businessId,
         },
       });
-
-      if (!business) {
-        return null;
-      }
-      const { openingHours, closingHours } = business;
+      if (!business) throw new Error("Business not found");
 
       // get all employees in descending order of priority
-      const employees = await ctx.prisma.user.findMany({
+      const employeesPromise = ctx.prisma.user.findMany({
         where: {
           businessId: ctx.session.user.businessId,
         },
@@ -37,23 +38,134 @@ export const scheduleRouter = router({
         },
       });
 
-      const schedule = [[], [], [], [], [], [], []];
+      const constraintsPromise = ctx.prisma.constraint.findMany({
+        where: {
+          businessId: ctx.session.user.businessId,
+        },
+      });
 
-      for (let i = 0; i < employees.length; i++) {
-        const dailySchedule = schedule[dayOfWeek];
-        const employee = employees[i];
-        if (!employee) {
-          continue;
-        }
-        const { startingHours, endingHours } = employee;
-        const isEmployeeAvailable =
-          startingHours[dayOfWeek] && endingHours[dayOfWeek];
+      const [employees, constraints] = await Promise.all([
+        employeesPromise,
+        constraintsPromise,
+      ]);
 
-        if (!isEmployeeAvailable) {
-          continue;
+      employees.forEach(async (employee) => {
+        let employeeWorkingHourCount = 0;
+        const availabilities = await ctx.prisma.availability.findMany({
+          where: {
+            userId: employee.id,
+          },
+        });
+
+        const { maxHours } = employee;
+
+        for (let i = 0; i < 7; i++) {
+          if (employeeWorkingHourCount >= maxHours) break;
+          const day = dateObject.clone().add(i, "days");
+          const dayOfWeek = day.day();
+
+          const employeeAvailabilitiesForDayOfWeek =
+            getEmployeeAvailabilitiesForDayOfWeek(availabilities, dayOfWeek);
+
+          if (employeeAvailabilitiesForDayOfWeek.length === 0) continue;
+
+          // constraints for the day
+          const constraintsForEmployee = findConstraintsForTheEmployee(
+            constraints,
+            employeeAvailabilitiesForDayOfWeek,
+            employee
+          );
+
+          if (constraintsForEmployee.length === 0) {
+            // this means there are no constraints for the day so we can just create a schedule for the employee.
+            // we should choose the longest available time for the employee and create a schedule for that time.
+
+            const longestAvailability = getLongestAvailableTimeForEmployee(
+              employeeAvailabilitiesForDayOfWeek
+            );
+
+            const shift = await ctx.prisma.shift.create({
+              data: {
+                start: longestAvailability.start,
+                end: longestAvailability.end,
+                userId: employee.id,
+                businessId: ctx.session.user.businessId,
+                date: day.toDate().toString(),
+              },
+            });
+            employeeWorkingHourCount += moment
+              .duration(moment(shift.end).diff(moment(shift.start)))
+              .asHours();
+          }
+          // } else {
+          //   const constraintsWithMaxLimit = constraintsForEmployee.filter(
+          //     (constraint) => constraint.type === "MAX"
+          //   );
+
+          //   if (constraintsWithMaxLimit.length > 0) {
+          //     // this means that there is a maximum employee limit for the day.
+          //     // We should check if the number of employees working on the day is less than the maximum limit.
+
+          //     const shiftsForTheDay = await ctx.prisma.shift.findMany({
+          //       where: {
+          //         businessId: ctx.session.user.businessId,
+          //         date: day.toDate().toString(),
+          //       },
+          //     });
+
+          //     const shiftsDuringEmployeeAvailabilities = shiftsForTheDay.filter(
+          //       (shift) =>
+          //         moment(shift.start).isBetween(
+          //           moment(employeeAvailabilitiesForDayOfWeek[0].start),
+          //           moment(employeeAvailabilitiesForDayOfWeek[0].end)
+          //         ) ||
+          //         moment(shift.end).isBetween(
+          //           moment(employeeAvailabilitiesForDayOfWeek[0].start),
+          //           moment(employeeAvailabilitiesForDayOfWeek[0].end)
+          //         )
+          //     );
+
+          //     if (
+          //       shiftsDuringEmployeeAvailabilities.length <
+          //       constraintsWithMaxLimit[0].limit
+          //     ) {
+          //       // this means that the number of employees working on the day is less than the maximum limit.
+          //       // We should create a schedule for the employee.
+
+          //       const longestAvailability = getLongestAvailableTimeForEmployee(
+          //         employeeAvailabilitiesForDayOfWeek
+          //       );
+
+          //       await ctx.prisma.shift.create({
+          //         data: {
+          //           start: longestAvailability.start,
+          //           end: longestAvailability.end,
+          //           userId: employee.id,
+          //           businessId: ctx.session.user.businessId,
+          //           date: day.toDate().toString(),
+          //         },
+          //       });
+          //     }
+          //   } else {
+          //     const longestAvailability = getLongestAvailableTimeForEmployee(
+          //       employeeAvailabilitiesForDayOfWeek
+          //     );
+
+          //     await ctx.prisma.shift.create({
+          //       data: {
+          //         start: longestAvailability.start,
+          //         end: longestAvailability.end,
+          //         userId: employee.id,
+          //         businessId: ctx.session.user.businessId,
+          //         date: day.toDate().toString(),
+          //       },
+          //     });
+          //   }
+          // }
         }
-      }
+      });
     }),
+
   getScheduleForDate: protectedProcedure
     .input(
       z.object({
@@ -61,7 +173,7 @@ export const scheduleRouter = router({
         department: z.string().nullish(),
       })
     )
-    .query(async ({ ctx, input }) => {
+    .query(async () => {
       return [];
     }),
 });

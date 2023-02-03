@@ -76,10 +76,10 @@ const DashboardManagerHeader = () => {
           className="dropdown-content menu rounded-box w-52 bg-base-100 p-2 shadow"
         >
           <li>
-            <a className="justify-between">
+            <Link href={`${BASE_URL}/profile`} className="justify-between">
               Profile
               <span className="badge">New</span>
-            </a>
+            </Link>
           </li>
           <li>
             <Link href={`${BASE_URL}/settings`}>Settings</Link>
