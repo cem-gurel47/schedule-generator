@@ -18,9 +18,12 @@ export type Availability = {
 };
 
 export type Shift = {
-  employee: Partial<Employee>;
-  shiftStart: string;
-  shiftEnd: string;
+  id: string;
+  userId: string;
+  businessId: string;
+  end: string;
+  start: string;
+  date: string;
 };
 
 export type Constraint = {
@@ -33,4 +36,5 @@ export type Constraint = {
   position: string;
   department: string;
   constraint: number;
+  isSatisfied?: boolean;
 };
