@@ -5,7 +5,7 @@ import {
   getEmployeeAvailabilitiesForDayOfWeek,
   findConstraintsForTheEmployee,
   getLongestAvailableTimeForEmployee,
-  getShiftDurationAsHours,
+  getShiftDurationAsMinutes,
   checkIfConstraintsAreSatisfied,
 } from "@utils/helpers";
 
@@ -52,7 +52,7 @@ export const scheduleRouter = router({
       ]);
 
       employees.forEach(async (employee) => {
-        let employeeWorkingHourCount = 0;
+        let employeeWorkingMinuteCount = 0;
         const availabilities = await ctx.prisma.availability.findMany({
           where: {
             userId: employee.id,
@@ -62,7 +62,7 @@ export const scheduleRouter = router({
         const { maxHours } = employee;
 
         for (let i = 0; i < 7; i++) {
-          if (employeeWorkingHourCount >= maxHours) break;
+          if (employeeWorkingMinuteCount >= maxHours * 60) break;
           const day = dateObject.clone().add(i, "days");
           const dayOfWeek = day.day();
 
@@ -76,12 +76,15 @@ export const scheduleRouter = router({
             dayOfWeek
           );
 
-          // get all the shift for the day
+          // get all the shift for the day with the user info
 
           const shiftsForDay = await ctx.prisma.shift.findMany({
             where: {
               date: day.toDate().toString(),
               businessId: ctx.session.user.businessId,
+            },
+            include: {
+              user: true,
             },
           });
 
@@ -111,9 +114,9 @@ export const scheduleRouter = router({
                 },
               });
               const shiftDuration =
-                getShiftDurationAsHours(longestAvailability);
+                getShiftDurationAsMinutes(longestAvailability);
 
-              employeeWorkingHourCount += shiftDuration;
+              employeeWorkingMinuteCount += shiftDuration;
               continue;
             } else {
               // there is a constraint during the employee's availability
@@ -134,10 +137,9 @@ export const scheduleRouter = router({
                   date: day.toDate().toString(),
                 },
               });
-              const shiftDuration =
-                getShiftDurationAsHours(longestAvailability);
 
-              employeeWorkingHourCount += shiftDuration;
+              employeeWorkingMinuteCount +=
+                getShiftDurationAsMinutes(longestAvailability);
               continue;
             }
           }
@@ -152,7 +154,7 @@ export const scheduleRouter = router({
               employeeAvailabilitiesForDayOfWeek
             );
 
-            const shift = await ctx.prisma.shift.create({
+            await ctx.prisma.shift.create({
               data: {
                 start: longestAvailability.start,
                 end: longestAvailability.end,
@@ -161,9 +163,8 @@ export const scheduleRouter = router({
                 date: day.toDate().toString(),
               },
             });
-            employeeWorkingHourCount += moment
-              .duration(moment(shift.end).diff(moment(shift.start)))
-              .asHours();
+            employeeWorkingMinuteCount +=
+              getShiftDurationAsMinutes(longestAvailability);
           }
           // } else {
           //   const constraintsWithMaxLimit = constraintsForEmployee.filter(

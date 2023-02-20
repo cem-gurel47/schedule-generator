@@ -23,6 +23,7 @@ const customJestConfig = {
     "@/(.*)$": "<rootDir>/src/$1",
     "@components/(.*)$": "<rootDir>/src/components/$1",
     "@utils/(.*)$": "<rootDir>/src/utils/$1",
+    "@models/(.*)$": "<rootDir>/src/types/$1",
   },
   testEnvironment: "jest-environment-jsdom",
 };

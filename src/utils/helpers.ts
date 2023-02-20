@@ -20,29 +20,21 @@ export const findConstraintsForTheEmployee = (
     const isSameDayOfWeek = constraint.dayOfWeek === dayOfWeek;
     const isSameDepartment = constraint.department === employee.department;
     const isSamePosition = constraint.position === employee.position;
+    const constraintStart = moment(constraint.start, "HH:mm");
+    const constraintEnd = moment(constraint.end, "HH:mm");
 
-    if (
-      !isSameDayOfWeek ||
-      !isSameDepartment ||
-      !isSamePosition ||
-      constraint.type === "MIN"
-    ) {
+    if (!isSameDepartment || !isSamePosition) {
       return false;
     }
 
     const isConstraintDuringEmployeeAvailabilities =
       employeeAvailabilitiesForDayOfWeek.some((availability) => {
-        const start = moment(availability.start, "HH:mm");
-        const end = moment(availability.end, "HH:mm");
-
-        const constraintStart = moment(constraint.start, "HH:mm");
-        const constraintEnd = moment(constraint.end, "HH:mm");
+        const availabilityStart = moment(availability.start, "HH:mm");
+        const availabilityEnd = moment(availability.end, "HH:mm");
 
         return (
-          (start.isSameOrAfter(constraintStart) &&
-            end.isSameOrBefore(constraintEnd)) ||
-          (start.isSameOrBefore(constraintStart) &&
-            end.isSameOrAfter(constraintEnd))
+          availabilityStart.isSameOrAfter(constraintStart) &&
+          availabilityEnd.isSameOrBefore(constraintEnd)
         );
       });
 
@@ -68,20 +60,38 @@ export const checkIfConstraintsAreSatisfied = (
 
     shifts.forEach((shift) => {
       const shiftDayOfWeek = moment(shift.date).day();
+
       const shiftStart = moment(shift.start, "HH:mm");
       const shiftEnd = moment(shift.end, "HH:mm");
 
       if (
         shiftDayOfWeek === dayOfWeek &&
-        shiftStart.isSameOrAfter(constraintStart) &&
-        shiftEnd.isSameOrBefore(constraintEnd)
+        (shiftStart.isBetween(
+          constraintStart,
+          constraintEnd,
+          undefined,
+          "[]"
+        ) ||
+          shiftEnd.isBetween(constraintStart, constraintEnd, undefined, "[]") ||
+          constraintStart.isBetween(shiftStart, shiftEnd, undefined, "[]") ||
+          constraintEnd.isBetween(shiftStart, shiftEnd, undefined, "[]")) &&
+        !shiftEnd.isSame(constraintStart) &&
+        !constraintEnd.isSame(shiftStart) &&
+        constraint.department === shift.user.department &&
+        constraint.position === shift.user.position
       ) {
         employeeCountDuringConstraint++;
       }
     });
 
-    if (type === "EXACT" || type === "MAX") {
+    if (type === "EXACT") {
       isSatisfied = employeeCountDuringConstraint === constraint.constraint;
+    }
+
+    if (type === "MAX") {
+      isSatisfied =
+        employeeCountDuringConstraint > 0 &&
+        employeeCountDuringConstraint <= constraint.constraint;
     }
 
     if (type === "MIN") {
@@ -102,12 +112,12 @@ export const getLongestAvailableTimeForEmployee = (
     employeeAvailabilitiesForDayOfWeek[0] as Availability;
 
   employeeAvailabilitiesForDayOfWeek.forEach((availability) => {
-    const start = moment(availability.start);
-    const end = moment(availability.end);
+    const start = moment(availability.start, "HH:mm");
+    const end = moment(availability.end, "HH:mm");
     const duration = moment.duration(end.diff(start));
 
-    const longestStart = moment(longestAvailability.start);
-    const longestEnd = moment(longestAvailability.end);
+    const longestStart = moment(longestAvailability.start, "HH:mm");
+    const longestEnd = moment(longestAvailability.end, "HH:mm");
     const longestDuration = moment.duration(longestEnd.diff(longestStart));
 
     if (duration > longestDuration) {
@@ -118,10 +128,10 @@ export const getLongestAvailableTimeForEmployee = (
   return longestAvailability;
 };
 
-export const getShiftDurationAsHours = (availability: Availability) => {
+export const getShiftDurationAsMinutes = (availability: Availability) => {
   const start = moment(availability.start, "HH:mm");
   const end = moment(availability.end, "HH:mm");
-  return moment.duration(end.diff(start)).asHours();
+  return moment.duration(end.diff(start)).asMinutes();
 };
 
 // export const getAvailableShiftHours = (

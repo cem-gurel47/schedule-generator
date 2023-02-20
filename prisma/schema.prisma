@@ -54,55 +54,53 @@ model Session {
 }
 
 model Availability {
-  id            String    @id @default(cuid())
-  userId        String
-  dayOfWeek     Int
-  start         String
-  end           String
+  id        String @id @default(cuid())
+  userId    String
+  dayOfWeek Int
+  start     String
+  end       String
 }
-
 
 model User {
   id            String    @id @default(cuid())
   role          String    @default("employee")
   name          String
-  email         String   @unique
+  email         String    @unique
   password      String?
   emailVerified DateTime?
   image         String    @default("")
   accounts      Account[]
   sessions      Session[]
   businessId    String
-  department    String   @default("") 
-  position      String   @default("")
-  priority      Int      @default(1)
-  minHours      Int      @default(0)
-  maxHours      Int      @default(0)
+  department    String    @default("")
+  position      String    @default("")
+  priority      Int       @default(1)
+  minHours      Int       @default(0)
+  maxHours      Int       @default(0)
+  Shift         Shift[]
 }
-
-
 
 model Business {
   id            String          @id @default(cuid())
   name          String
   image         String?
-  openingHours  String[]       @default([])
-  closingHours  String[]       @default([])
-  businessUsers BusinessUsers[] 
+  openingHours  String[]        @default([])
+  closingHours  String[]        @default([])
+  businessUsers BusinessUsers[]
   departments   String[]
   positions     String[]
 }
 
 model Constraint {
-  id            String          @id @default(cuid())
-  businessId    String
-  dayOfWeek     Int          
-  start         String
-  end           String
-  position      String
-  department    String
-  constraint    Int
-  type          CONSTRAINT         
+  id         String     @id @default(cuid())
+  businessId String
+  dayOfWeek  Int
+  start      String
+  end        String
+  position   String
+  department String
+  constraint Int
+  type       CONSTRAINT
 }
 
 // model Department {
@@ -122,12 +120,13 @@ model Constraint {
 // }
 
 model Shift {
-  id            String          @id @default(cuid())
-  userId        String
-  businessId    String
-  start         String
-  end           String
-  date          String
+  id         String @id @default(cuid())
+  userId     String
+  businessId String
+  start      String
+  end        String
+  date       String
+  user       User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model BusinessUsers {

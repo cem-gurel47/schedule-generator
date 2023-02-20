@@ -24,6 +24,7 @@ export type Shift = {
   end: string;
   start: string;
   date: string;
+  user: Employee;
 };
 
 export type Constraint = {
